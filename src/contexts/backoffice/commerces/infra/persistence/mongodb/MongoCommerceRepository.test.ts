@@ -43,4 +43,6 @@ describe(MongoCommerceRepository, () => {
         expect(found)
             .toStrictEqual(commerce);
     });
+
+    // TODO test when item is not in BBDD
 });
