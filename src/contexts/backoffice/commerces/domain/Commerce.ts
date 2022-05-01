@@ -40,6 +40,24 @@ export default class Commerce extends Aggregate {
         return commerce;
     }
 
+    static fromPrimitives({
+        address,
+        phone,
+        name,
+        description,
+        id,
+        email
+    }: CommercePrimitives): Commerce {
+        return new Commerce(
+            new UuidVo(id),
+            new CommerceNameVo(name),
+            new EmailVo(email),
+            new CommerceDescriptionVo(description),
+            new PhoneVo(phone),
+            new AddressVo(address)
+        )
+    }
+
     toPrimitives(): CommercePrimitives {
         return {
             id: this.id.value,
