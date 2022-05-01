@@ -1,4 +1,4 @@
-import Aggregate from '@shared/domain/aggregate';
+import Aggregate from '@shared/domain/Aggregate';
 
 export default class QueryResponse<T extends Aggregate> {
     readonly data: T;

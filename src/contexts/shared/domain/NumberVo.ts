@@ -1,4 +1,4 @@
-import ValueObject from '@shared/domain/value-object';
+import ValueObject from '@shared/domain/ValueObject';
 
 export default class NumberVo extends ValueObject<number> {
     toString(): string {

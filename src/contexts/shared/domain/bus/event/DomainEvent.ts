@@ -1,4 +1,4 @@
-import UuidVo from '@shared/domain/uuid-vo';
+import UuidVo from '@shared/domain/UuidVo';
 
 export abstract class DomainEvent {
     static EVENT_NAME: string;

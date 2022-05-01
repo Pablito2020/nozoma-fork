@@ -1,14 +1,16 @@
-import { DomainEvent } from '@shared/domain/bus/event/domain-event';
+import { DomainEvent } from '@shared/domain/bus/event/DomainEvent';
 
 export default abstract class Aggregate {
-    readonly domainEvents: Array<DomainEvent>;
+    private domainEvents: Array<DomainEvent>;
 
     protected constructor() {
         this.domainEvents = [];
     }
 
     pullDomainEvents(): Array<DomainEvent> {
-        return this.domainEvents;
+        const events = this.domainEvents
+        this.domainEvents = []
+        return events;
     }
 
     record(event: DomainEvent): void {

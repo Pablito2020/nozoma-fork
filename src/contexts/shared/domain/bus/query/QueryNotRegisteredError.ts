@@ -1,4 +1,4 @@
-import { Query } from '@shared/domain/bus/query/query';
+import { Query } from '@shared/domain/bus/query/Query';
 
 export default class QueryNotRegisteredError extends Error {
     constructor(query: Query) {

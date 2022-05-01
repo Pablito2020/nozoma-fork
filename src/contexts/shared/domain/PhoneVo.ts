@@ -1,3 +1,3 @@
-import StringVo from '@shared/domain/string-vo';
+import StringVo from '@shared/domain/StringVo';
 
 export default class PhoneVo extends StringVo {}

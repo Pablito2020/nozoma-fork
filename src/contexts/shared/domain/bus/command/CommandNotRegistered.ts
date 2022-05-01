@@ -1,4 +1,4 @@
-import { Command } from '@shared/domain/bus/command/command';
+import { Command } from '@shared/domain/bus/command/Command';
 
 export default class CommandNotRegisteredError extends Error {
     constructor(command: Command) {

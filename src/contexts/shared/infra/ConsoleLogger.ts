@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-import { Logger } from '@shared/domain/logger';
+import { Logger } from '@shared/domain/Logger';
 
 class ConsoleLogger implements Logger {
     // eslint-disable-next-line class-methods-use-this
