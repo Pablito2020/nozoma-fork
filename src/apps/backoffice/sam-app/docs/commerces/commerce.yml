@@ -1,0 +1,22 @@
+Commerce:
+  type: object
+  properties:
+    id:
+      $ref: ../shared/uuid.yml#/Uuid
+      description: An uuid (v4) which identifies the commerce in the Commerce Management Service.
+    email:
+      $ref: ../shared/email.yml#/Email
+      description: commerce's email.
+    phone:
+      $ref: ../shared/phone.yml#/Phone
+      description: commerce's phone.
+    name:
+      $ref: ./commerce-name.yml#/CommerceName
+    description:
+      $ref: ./commerce-description.yml#/CommerceDescription
+    address:
+      $ref: ./commerce-address.yml#/CommerceAddress
+  required: [ 'id', 'name', 'email', 'phone', 'description', 'address' ]
+  additionalProperties: false
+
+

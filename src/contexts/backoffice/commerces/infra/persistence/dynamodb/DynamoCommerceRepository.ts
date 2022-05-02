@@ -34,8 +34,7 @@ export default class DynamoCommerceRepository implements CommerceRepository {
             resp = await this.client.get({
                 TableName: this.tableName,
                 Key: {
-                    partitionKey: key,
-                    sortKey: key
+                    partitionKey: key
                 }
             })
                 .promise();
@@ -48,7 +47,6 @@ export default class DynamoCommerceRepository implements CommerceRepository {
             TableName: this.tableName,
             Item: {
                 partitionKey: key,
-                sortKey: key,
                 ...commerce.toPrimitives()
             }
         })

@@ -14,12 +14,94 @@ Globals:
         AWS_NODEJS_CONNECTION_REUSE_ENABLED: 1
 
 Resources:
-  HelloWorldLambda:
+  ###############################
+  #### API GATEWAY          #####
+  ###############################
+  ApiGatewayRestApi2:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: 'develop'
+      MinimumCompressionSize: 1024
+      OpenApiVersion: '3.0.1'
+      DefinitionBody:
+        'Fn::Transform':
+          Name: AWS::Include
+          Parameters:
+            Location: .dist/docs/swagger.yml
+
+  AllowExecuteLambaRole:
+    Type: AWS::IAM::Role
+    Properties:
+      Path: /
+      RoleName: !Sub ${AWS::StackName}-api-execution-role
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - apigateway.amazonaws.com
+            Action: sts:AssumeRole
+      Policies:
+        - PolicyName: !Sub ${AWS::StackName}-allow-execute-lamba-policy
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - lambda:InvokeFunction
+                Resource:
+                  - !Sub 'arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:${AWS::StackName}-*'
+
+  PostControllerLambda:
     Type: AWS::Serverless::Function
     Properties:
-      FunctionName: !Sub '${AWS::StackName}-hello-world-lambda'
-      Handler: hello-world.handler
-      CodeUri: dist/webpack
+      FunctionName: !Sub '${AWS::StackName}-post-controller'
+      Handler: post-controller.handler
+      CodeUri: .dist/webpack
+      Environment:
+        Variables:
+          TABLE_NAME: !Sub '${AWS::StackName}-backoffice-dynamodb-table'
+      Policies:
+        - Statement:
+            - Effect: Allow
+              Action:
+                - dynamodb:PutItem
+                - dynamodb:GetItem
+              Resource:
+                - !GetAtt Dynamodb.Arn
+            - Effect: Allow
+              Action:
+                - dynamodb:Query
+              Resource:
+                - !Sub '${Dynamodb.Arn}/index/*'
+
+  Dynamodb:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: !Sub '${AWS::StackName}-backoffice-dynamodb-table'
+      ProvisionedThroughput:
+        ReadCapacityUnits: 5
+        WriteCapacityUnits: 5
+      AttributeDefinitions:
+        - AttributeName: partitionKey
+          AttributeType: S
+        - AttributeName: email
+          AttributeType: S
+      KeySchema:
+        - AttributeName: partitionKey
+          KeyType: HASH
+      GlobalSecondaryIndexes:
+        - IndexName: emailIndex
+          KeySchema:
+            - AttributeName: email
+              KeyType: HASH
+          Projection:
+            ProjectionType: ALL
+          ProvisionedThroughput:
+            ReadCapacityUnits: 5
+            WriteCapacityUnits: 5
+
 
 
 

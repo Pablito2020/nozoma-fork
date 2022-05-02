@@ -10,16 +10,11 @@
     "src/apps/*/*"
   ],
   "scripts": {
-    "lint:contexts": "npx eslint src/contexts --ext .ts --ignore-pattern 'src/apps/**/*'",
-    "lint:apps": "npx lerna run lint --stream --concurrency 1",
-    "lint": "yarn lint:contexts && yarn lint:apps",
     "test:unit": "NODE_ENV=test jest --config=jest.config.js --verbose",
-    "test:integration": "NODE_ENV=test-ci jest --config=jest.config.integration.js --verbose --runInBand",
-    "test:local:integration": "yarn start:database && NODE_ENV=test-local jest --config=jest.config.integration.js --verbose --runInBand && yarn stop:database",
+    "test:local:integration": "yarn start:database && jest --config=jest.config.integration.js --verbose --runInBand && yarn stop:database",
     "test": "yarn test:unit && yarn test:local:integration",
     "start:database": "cd docker && docker-compose up -d",
-    "stop:database": "cd docker && docker-compose down --rmi local --volumes --remove-orphans",
-    "cms:start": "yarn start:database && cd src/apps/cms/serverless && yarn start"
+    "stop:database": "cd docker && docker-compose down --rmi local --volumes --remove-orphans"
   },
   "dependencies": {
     "uuid": "^3.4.0",

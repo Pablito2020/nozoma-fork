@@ -1,0 +1,11 @@
+openapi: 3.0.1
+x-amazon-apigateway-minimum-compression-size: 1024
+info:
+  title: Nozoma backoffice api
+  description: This is the API for no
+  version: '2021-03-11T13:53:22Z'
+servers:
+  - url: 'http://localhost:8080'
+paths:
+  /commerces:
+    $ref: './docs/commerces/endpoints.yml'

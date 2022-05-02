@@ -1,0 +1,4 @@
+CommerceAddress:
+  type: string
+  description: Commerce's location
+  example: 'Av/Catalunya 1'

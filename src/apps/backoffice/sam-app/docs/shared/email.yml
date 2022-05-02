@@ -1,0 +1,3 @@
+Email:
+  type: string
+  example: 'example-mail@mail.com'

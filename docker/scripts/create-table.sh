@@ -9,11 +9,9 @@ aws dynamodb --endpoint-url=http://localhost:4566 create-table \
     --table-name nozoma-backoffice \
     --attribute-definitions \
         AttributeName=partitionKey,AttributeType=S \
-        AttributeName=sortKey,AttributeType=S \
         AttributeName=email,AttributeType=S \
     --key-schema \
         AttributeName=partitionKey,KeyType=HASH \
-        AttributeName=sortKey,KeyType=RANGE \
     --billing-mode \
         PAY_PER_REQUEST \
     --global-secondary-indexes  \
