@@ -5,7 +5,9 @@ import Commerce from '@backoffice-contexts/commerces/domain/Commerce';
 import UuidVo from '@shared/domain/UuidVo';
 
 export default class CommerceRepositoryMock implements CommerceRepository {
-
+    delete(id: UuidVo): Promise<void> {
+        throw new Error('Method not implemented.');
+    }
 
     readonly findByIdMock = jest.fn();
     readonly findByEmailMock = jest.fn();

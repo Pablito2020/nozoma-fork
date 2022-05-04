@@ -11,10 +11,14 @@ export default class DynamoCommerceRepository implements CommerceRepository {
     constructor(private client: DocumentClient, readonly tableName: string, readonly emailIndex: string) {
     }
 
-    async delete(id: UuidVo): Promise<void> {
+    async delete(commerce: Commerce): Promise<void> {
+        const key = composeKey(commerce.id)
         await this.client.delete({
             TableName: this.tableName,
-            Key: id
+            Key: {
+                partitionKey: key,
+                ...commerce.toPrimitives()
+            }
         })
             .promise()
     }

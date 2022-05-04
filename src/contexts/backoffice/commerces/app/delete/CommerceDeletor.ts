@@ -14,7 +14,8 @@ export default class CommerceDeletor {
     ): Promise<void> {
         const commerce = await this.repo.findById(id);
         if (commerce) {
-            await this.repo.delete(id)
+            commerce.delete()
+            await this.repo.delete(commerce)
             await this.eventBus.publish(commerce.pullDomainEvents());
         }
     }
