@@ -12,11 +12,10 @@ export default class CommerceDeletor {
     async run(
         id: UuidVo
     ): Promise<void> {
-        const [commerceId] = await Promise.all([
-            this.repo.findById(id)
-        ]);
-        if (!commerceId) {
-            await this.repo.findById(id)
+        const commerce = await this.repo.findById(id);
+        if (commerce) {
+            await this.repo.delete(id)
+            await this.eventBus.publish(commerce.pullDomainEvents());
         }
     }
 }

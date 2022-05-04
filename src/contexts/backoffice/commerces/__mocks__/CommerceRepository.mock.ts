@@ -6,6 +6,7 @@ import UuidVo from '@shared/domain/UuidVo';
 
 export default class CommerceRepositoryMock implements CommerceRepository {
 
+
     readonly findByIdMock = jest.fn();
     readonly findByEmailMock = jest.fn();
     readonly saveMock = jest.fn();
