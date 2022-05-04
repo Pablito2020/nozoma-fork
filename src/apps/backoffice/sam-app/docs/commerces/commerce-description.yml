@@ -1,0 +1,4 @@
+CommerceDescription:
+  type: string
+  description: Commerce's description
+  example: 'This is a description of my awesome commerce'

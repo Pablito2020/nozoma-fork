@@ -1,0 +1,29 @@
+version: '3.9'
+
+services:
+  mongodb:
+    image: mongo:5.0
+    container_name: mongodb-nozoma
+    ports:
+      - 27017:27017
+    volumes:
+      - './.mongodb:/data/db'
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=mongo_username
+      - MONGO_INITDB_ROOT_PASSWORD=mongo_pwd
+
+  aws-localstack:
+    image: localstack/localstack:latest
+    container_name: aws-localstack-nozoma
+    environment:
+      - SERVICES=dynamodb
+      # - DEBUG=1
+      - DATA_DIR=./tmp/localstack/data
+      - DEFAULT_REGION=eu-west-1
+      - AWS_ACCESS_KEY_ID=test
+      - AWS_SECRET_ACCESS_KEY=test
+    ports:
+      - '4566:4566'
+    volumes:
+      - './.localstack:/tmp/localstack'
+      - '/var/run/docker.sock:/var/run/docker.sock'

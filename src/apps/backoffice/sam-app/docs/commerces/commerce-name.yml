@@ -1,0 +1,5 @@
+CommerceName:
+  type: string
+  description: Commerce's name
+  example: 'My commerce'
+

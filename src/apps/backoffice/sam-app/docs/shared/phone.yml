@@ -1,0 +1,3 @@
+Phone:
+  type: string
+  example: '+34 667 25 86 41'
