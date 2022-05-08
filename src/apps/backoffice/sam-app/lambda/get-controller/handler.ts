@@ -29,10 +29,9 @@ const logger: Logger = container.get(
     ) => {
         logger.info(`REQUEST PATH: ${event.path}`);
         logger.info(`REQUEST BODY: ${event.body}`);
+        logger.info(`REQUEST QUERY STRING PARAMETERS: ${JSON.stringify(event.queryStringParameters)}`)
         try {
-            const {
-                    id
-                } = JSON.parse(event.body as string),
+            const id = event?.queryStringParameters?.id as string,
                 getCommerceQuery = new GetCommerceQuery(id),
                 commerce = await handlerGetter.handle(getCommerceQuery);
             return {

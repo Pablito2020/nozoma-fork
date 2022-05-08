@@ -76,6 +76,29 @@ Resources:
               Resource:
                 - !Sub '${Dynamodb.Arn}/index/*'
 
+
+  GetControllerLambda:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub '${AWS::StackName}-get-controller'
+      Handler: get-controller.handler
+      CodeUri: .dist/webpack
+      Environment:
+        Variables:
+          TABLE_NAME: !Sub '${AWS::StackName}-backoffice-dynamodb-table'
+      Policies:
+        - Statement:
+            - Effect: Allow
+              Action:
+                - dynamodb:GetItem
+              Resource:
+                - !GetAtt Dynamodb.Arn
+            - Effect: Allow
+              Action:
+                - dynamodb:Query
+              Resource:
+                - !Sub '${Dynamodb.Arn}/index/*'
+
   Dynamodb:
     Type: AWS::DynamoDB::Table
     Properties:
