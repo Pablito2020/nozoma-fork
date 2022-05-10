@@ -1,4 +1,4 @@
-import CommerceDeletor from "@backoffice-contexts/commerces/app/delete/CommerceDeletor";
+/*import CommerceDeletor from "@backoffice-contexts/commerces/app/delete/CommerceDeletor";
 import CommerceRepositoryMock from "@backoffice-contexts/commerces/__mocks__/CommerceRepository.mock";
 import CommerceCreator from "@backoffice-contexts/commerces/app/create/CommerceCreator";
 import EventBusMock from "@shared/__mocks__/EventBus.mock";
@@ -16,4 +16,4 @@ describe (CommerceDeletor, () => {
 
 
     })
-});
+});*/
