@@ -10,10 +10,13 @@ describe(CommerceGetter, () => {
             getter = new CommerceGetter(repo),
             handler = new CommerceGetterHandler(getter),
             expected = CommerceMother.random(),
-            query = GetCommerceQueryMother.fromCommerce(expected),
-            response = await handler.handle(query);
+            query = GetCommerceQueryMother.fromCommerce(expected);
 
         repo.whenFindByIdThenReturn(expected);
+
+        // eslint-disable-next-line one-var
+        const response = await handler.handle(query);
+
         repo.assertFindIdIsCalledWith(expected.id);
 
         expect(response.data)
