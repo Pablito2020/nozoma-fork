@@ -8,4 +8,5 @@ servers:
   - url: 'http://localhost:8080'
 paths:
   /commerces:
+    delete:
     $ref: './docs/commerces/endpoints.yml'
