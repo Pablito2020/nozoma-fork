@@ -18,6 +18,16 @@ get:
         application/json:
           schema:
             $ref: ./commerce.yml#/Commerce
+    '400':
+      description: Request data format is not valid
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+
     '404':
       description: The commerce doesn't exist
       content:
