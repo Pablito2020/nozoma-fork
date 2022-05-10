@@ -7,11 +7,12 @@ import httpCors from "@middy/http-cors";
 import {DEFINITIONS, register as sharedRegister} from "../shared/dependencies.di";
 import {ContainerBuilder} from "node-dependency-injection";
 import {Logger} from "@shared/domain/Logger";
-import AlreadyExists from "@shared/domain/AlreadyExists";
 import * as console from "console";
 import CommerceSearcherHandler from "@backoffice-contexts/commerces/app/get/CommerceSearcherHandler";
 import {SEARCHER_DEFINITIONS, register as getRegister} from "./dependencies.di";
 import SearchCommerceQuery from "@backoffice-contexts/commerces/app/get/SearchCommerceQuery";
+import NotExistCommerceException from "@backoffice-contexts/commerces/domain/NotExistsCommerce";
+import InvalidArgumentError from "@shared/domain/InvalidArgumentError";
 
 const container = new ContainerBuilder();
 sharedRegister(container);
@@ -40,9 +41,14 @@ const logger: Logger = container.get(
             };
         } catch (e) {
             console.info(e);
-            if (e instanceof AlreadyExists) {
+            if (e instanceof InvalidArgumentError) {
                 return {
                     statusCode: 400,
+                    body: e.message
+                };
+            } else if (e instanceof NotExistCommerceException) {
+                return {
+                    statusCode: 404,
                     body: e.message
                 };
             } else {
