@@ -4,7 +4,7 @@ import Commerce from "@backoffice-contexts/commerces/domain/Commerce";
 import NotExistCommerceException from "@backoffice-contexts/commerces/domain/NotExistsCommerce";
 
 
-export default class CommerceGetter {
+export default class CommerceSearcher {
     constructor(
         readonly repo: CommerceRepository
     ) {

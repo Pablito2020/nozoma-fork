@@ -9,9 +9,9 @@ import {ContainerBuilder} from "node-dependency-injection";
 import {Logger} from "@shared/domain/Logger";
 import AlreadyExists from "@shared/domain/AlreadyExists";
 import * as console from "console";
-import CommerceGetterHandler from "@backoffice-contexts/commerces/app/get/CommerceGetterHandler";
-import {GETTER_DEFINITIONS, register as getRegister} from "./dependencies.di";
-import GetCommerceQuery from "@backoffice-contexts/commerces/app/get/GetCommerceQuery";
+import CommerceSearcherHandler from "@backoffice-contexts/commerces/app/get/CommerceSearcherHandler";
+import {SEARCHER_DEFINITIONS, register as getRegister} from "./dependencies.di";
+import SearchCommerceQuery from "@backoffice-contexts/commerces/app/get/SearchCommerceQuery";
 
 const container = new ContainerBuilder();
 sharedRegister(container);
@@ -20,8 +20,8 @@ getRegister(container);
 const logger: Logger = container.get(
     DEFINITIONS.Logger
 ),
-    handlerGetter: CommerceGetterHandler = container.get(
-        GETTER_DEFINITIONS.Handler
+    handlerGetter: CommerceSearcherHandler = container.get(
+        SEARCHER_DEFINITIONS.Handler
     ),
     execute: APIGatewayProxyHandler = async (
         event: APIGatewayProxyEvent,
@@ -32,8 +32,8 @@ const logger: Logger = container.get(
         logger.info(`REQUEST BODY: ${event.body}`);
         try {
             const id = event?.pathParameters?.commerceid as string,
-                getCommerceQuery = new GetCommerceQuery(id),
-                commerce = await handlerGetter.handle(getCommerceQuery);
+                searchCommerceQuery = new SearchCommerceQuery(id),
+                commerce = await handlerGetter.handle(searchCommerceQuery);
             return {
                 statusCode: 200,
                 body: JSON.stringify(commerce.data.toPrimitives())

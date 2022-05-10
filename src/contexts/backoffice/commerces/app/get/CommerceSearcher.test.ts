@@ -1,17 +1,17 @@
 import CommerceRepositoryMock from "@backoffice-contexts/commerces/__mocks__/CommerceRepository.mock";
 import CommerceMother from "@backoffice-contexts/commerces/mothers/Commerce.mother";
-import CommerceGetterHandler from "@backoffice-contexts/commerces/app/get/CommerceGetterHandler";
-import CommerceGetter from "@backoffice-contexts/commerces/app/get/CommerceGetter";
-import GetCommerceQueryMother from "@backoffice-contexts/commerces/mothers/GetCommerceQueryMother";
+import CommerceSearcherHandler from "@backoffice-contexts/commerces/app/get/CommerceSearcherHandler";
+import CommerceSearcher from "@backoffice-contexts/commerces/app/get/CommerceSearcher";
+import SearchCommerceQueryMother from "@backoffice-contexts/commerces/mothers/SearchCommerceQueryMother";
 import NotExistCommerceException from "@backoffice-contexts/commerces/domain/NotExistsCommerce";
 
-describe(CommerceGetter, () => {
+describe(CommerceSearcher, () => {
     it('should return a commerce object when id exists', async () => {
         const repo = new CommerceRepositoryMock(),
-            getter = new CommerceGetter(repo),
-            handler = new CommerceGetterHandler(getter),
+            getter = new CommerceSearcher(repo),
+            handler = new CommerceSearcherHandler(getter),
             expected = CommerceMother.random(),
-            query = GetCommerceQueryMother.fromCommerce(expected);
+            query = SearchCommerceQueryMother.fromCommerce(expected);
 
         repo.whenFindByIdThenReturn(expected);
 
@@ -23,13 +23,13 @@ describe(CommerceGetter, () => {
     });
 });
 
-describe(CommerceGetter, () => {
+describe(CommerceSearcher, () => {
     it('should throw an error if commerce object doesn\'t exist', async () => {
         const repo = new CommerceRepositoryMock(),
-            getter = new CommerceGetter(repo),
-            handler = new CommerceGetterHandler(getter),
+            getter = new CommerceSearcher(repo),
+            handler = new CommerceSearcherHandler(getter),
             expected = CommerceMother.random(),
-            query = GetCommerceQueryMother.fromCommerce(expected);
+            query = SearchCommerceQueryMother.fromCommerce(expected);
 
         repo.whenFindByIdThenReturn(null);
 
