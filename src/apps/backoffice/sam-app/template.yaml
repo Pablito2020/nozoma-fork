@@ -75,7 +75,7 @@ Resources:
                 - dynamodb:Query
               Resource:
                 - !Sub '${Dynamodb.Arn}/index/*'
-                -
+
 
   DeleteControllerLambda:
     Type: AWS::Serverless::Function
@@ -90,8 +90,6 @@ Resources:
         - Statement:
             - Effect: Allow
               Action:
-                - dynamodb:PutItem
-                - dynamodb:GetItem
                 - dynamodb:DeleteItem
               Resource:
                 - !GetAtt Dynamodb.Arn
@@ -126,7 +124,6 @@ Resources:
           ProvisionedThroughput:
             ReadCapacityUnits: 5
             WriteCapacityUnits: 5
-
 
 
 
