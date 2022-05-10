@@ -1,6 +1,7 @@
 import {CommerceRepository} from "@backoffice-contexts/commerces/domain/CommerceRepository";
 import UuidVo from "@shared/domain/UuidVo";
 import Commerce from "@backoffice-contexts/commerces/domain/Commerce";
+import NotExistCommerceException from "@backoffice-contexts/commerces/domain/NotExistsCommerce";
 
 
 export default class CommerceGetter {
@@ -15,7 +16,7 @@ export default class CommerceGetter {
     ): Promise<Commerce> {
         const commerce = await this.repo.findById(id);
         if (commerce === null)
-            throw new Error("Commerce not found");
+            throw new NotExistCommerceException("Commerce not found: " + id);
         return commerce;
     }
 }
