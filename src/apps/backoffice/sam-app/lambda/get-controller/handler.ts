@@ -28,10 +28,10 @@ const logger: Logger = container.get(
         _context: Context
     ) => {
         logger.info(`REQUEST PATH: ${event.path}`);
+        logger.info(`REQUEST PATH parameters: ${event.pathParameters}`);
         logger.info(`REQUEST BODY: ${event.body}`);
-        logger.info(`REQUEST QUERY STRING PARAMETERS: ${JSON.stringify(event.queryStringParameters)}`)
         try {
-            const id = event?.queryStringParameters?.id as string,
+            const id = event?.pathParameters?.commerceid as string,
                 getCommerceQuery = new GetCommerceQuery(id),
                 commerce = await handlerGetter.handle(getCommerceQuery);
             return {
