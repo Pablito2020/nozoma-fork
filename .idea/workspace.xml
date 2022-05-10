@@ -2,17 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c864683b-d23b-4418-a13e-b015537bd6ad" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/apps/backoffice/sam-app/.dist/webpack/delete-controller.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/apps/backoffice/sam-app/.dist/webpack/post-controller.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/apps/backoffice/sam-app/lambda/delete-controller/dependencies.di.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/apps/backoffice/sam-app/lambda/delete-controller/handler.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/contexts/backoffice/commerces/app/delete/DeleteCommerceResponse.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/apps/backoffice/sam-app/samconfig.toml" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/backoffice/sam-app/samconfig.toml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/apps/backoffice/sam-app/docs/commerces/endpoint-commerce.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/apps/backoffice/sam-app/docs/commerces/endpoints.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/backoffice/sam-app/docs/commerces/endpoints-commerces.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/apps/backoffice/sam-app/node_modules/.cache/webpack/default-development/1.pack" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/backoffice/sam-app/node_modules/.cache/webpack/default-development/1.pack" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/apps/backoffice/sam-app/node_modules/.cache/webpack/default-development/index.pack" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/backoffice/sam-app/node_modules/.cache/webpack/default-development/index.pack" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/apps/backoffice/sam-app/node_modules/.cache/webpack/default-development/index.pack.old" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/backoffice/sam-app/node_modules/.cache/webpack/default-development/index.pack.old" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/apps/backoffice/sam-app/swagger.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/backoffice/sam-app/swagger.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/contexts/backoffice/commerces/app/delete/CommerceDeletor.test.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/contexts/backoffice/commerces/app/delete/CommerceDeletor.test.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/contexts/backoffice/commerces/app/delete/DeleteCommerceCommand.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/contexts/backoffice/commerces/app/delete/DeleteCommerceCommand.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/contexts/backoffice/commerces/app/delete/DeleteCommerceHandler.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/contexts/backoffice/commerces/app/delete/DeleteCommerceHandler.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -33,24 +28,24 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_ADD_EXTERNAL_FILES": "true",
-    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "last_opened_file_path": "/home/patrick/Downloads/NozomaCDA",
-    "node.js.detected.package.eslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "nodejs.jest.jest_package": "/home/patrick/Downloads/NozomaCDA/node_modules/jest",
-    "nodejs_package_manager_path": "npm",
-    "prettierjs.PrettierConfiguration.Package": "/home/patrick/Downloads/NozomaCDA/node_modules/prettier",
-    "ts.external.directory.path": "/home/patrick/Downloads/NozomaCDA/node_modules/typescript/lib",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/home/patrick/Downloads/NozomaCDA&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs.jest.jest_package&quot;: &quot;/home/patrick/Downloads/NozomaCDA/node_modules/jest&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;prettierjs.PrettierConfiguration.Package&quot;: &quot;/home/patrick/Downloads/NozomaCDA/node_modules/prettier&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;/home/patrick/Downloads/NozomaCDA/node_modules/typescript/lib&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
-  <component name="RunManager" selected="npm.build">
+}</component>
+  <component name="RunManager" selected="npm.docs:bundle">
     <configuration name="DynamoCommerceRepository" type="JavaScriptTestRunnerJest" nameIsGenerated="true">
       <config-file value="$PROJECT_DIR$/jest.config.integration.js" />
       <node-interpreter value="project" />
@@ -77,8 +72,19 @@
       <envs />
       <method v="2" />
     </configuration>
+    <configuration name="docs:bundle" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
+      <package-json value="$PROJECT_DIR$/src/apps/backoffice/sam-app/package.json" />
+      <command value="run" />
+      <scripts>
+        <script value="docs:bundle" />
+      </scripts>
+      <node-interpreter value="project" />
+      <envs />
+      <method v="2" />
+    </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="npm.docs:bundle" />
         <item itemvalue="npm.build" />
       </list>
     </recent_temporary>
@@ -93,7 +99,7 @@
       <updated>1651575451394</updated>
       <workItem from="1651575452687" duration="401000" />
       <workItem from="1651655981652" duration="5314000" />
-      <workItem from="1652174338748" duration="5178000" />
+      <workItem from="1652174338748" duration="6557000" />
     </task>
     <servers />
   </component>
