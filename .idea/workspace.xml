@@ -3,17 +3,12 @@
   <component name="ChangeListManager">
     <list default="true" id="c864683b-d23b-4418-a13e-b015537bd6ad" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/.package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/.package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/apps/backoffice/sam-app/docs/commerces/endpoints.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/backoffice/sam-app/docs/commerces/endpoints.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/apps/backoffice/sam-app/samconfig.toml" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/backoffice/sam-app/samconfig.toml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/apps/backoffice/sam-app/template.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/apps/backoffice/sam-app/template.yaml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/contexts/backoffice/commerces/__mocks__/CommerceRepository.mock.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/contexts/backoffice/commerces/__mocks__/CommerceRepository.mock.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/contexts/backoffice/commerces/app/delete/CommerceDeletor.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/contexts/backoffice/commerces/app/delete/CommerceDeletor.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/contexts/backoffice/commerces/domain/Commerce.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/contexts/backoffice/commerces/domain/Commerce.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/contexts/backoffice/commerces/domain/CommerceDeletedEvent.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/contexts/backoffice/commerces/domain/CommerceDeletedEvent.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/contexts/backoffice/commerces/domain/CommerceRepository.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/contexts/backoffice/commerces/domain/CommerceRepository.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/contexts/backoffice/commerces/infra/persistence/dynamodb/DynamoCommerceRepository.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/contexts/backoffice/commerces/infra/persistence/dynamodb/DynamoCommerceRepository.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/contexts/shared/domain/Aggregate.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/contexts/shared/domain/Aggregate.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/contexts/shared/domain/bus/command/CommandHandler.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/contexts/shared/domain/bus/command/CommandHandler.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/contexts/backoffice/commerces/app/delete/CommerceDeletor.test.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/contexts/backoffice/commerces/app/delete/CommerceDeletor.test.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/contexts/backoffice/commerces/infra/persistence/dynamodb/DynamoCommerceRepository.test.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/contexts/backoffice/commerces/infra/persistence/dynamodb/DynamoCommerceRepository.test.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -27,6 +22,7 @@
     <option name="stateVersion" value="1" />
   </component>
   <component name="ProjectId" id="28eSEyVuPBC97Lg6lxqCrLM2v9C" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -39,12 +35,31 @@
     &quot;last_opened_file_path&quot;: &quot;/home/patrick/Downloads/NozomaCDA&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs.jest.jest_package&quot;: &quot;/home/patrick/Downloads/NozomaCDA/node_modules/jest&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
     &quot;prettierjs.PrettierConfiguration.Package&quot;: &quot;/home/patrick/Downloads/NozomaCDA/node_modules/prettier&quot;,
     &quot;ts.external.directory.path&quot;: &quot;/home/patrick/Downloads/NozomaCDA/node_modules/typescript/lib&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
+  <component name="RunManager">
+    <configuration name="DynamoCommerceRepository" type="JavaScriptTestRunnerJest" nameIsGenerated="true">
+      <config-file value="$PROJECT_DIR$/jest.config.integration.js" />
+      <node-interpreter value="project" />
+      <node-options value="" />
+      <jest-package value="$PROJECT_DIR$/node_modules/jest" />
+      <working-dir value="$PROJECT_DIR$" />
+      <envs>
+        <env name="AWS_REGION" value="eu-west-1" />
+      </envs>
+      <scope-kind value="SUITE" />
+      <test-file value="$PROJECT_DIR$/src/contexts/backoffice/commerces/infra/persistence/dynamodb/DynamoCommerceRepository.test.ts" />
+      <test-names>
+        <test-name value="DynamoCommerceRepository" />
+      </test-names>
+      <method v="2" />
+    </configuration>
+  </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -54,7 +69,8 @@
       <option name="presentableId" value="Default" />
       <updated>1651575451394</updated>
       <workItem from="1651575452687" duration="401000" />
-      <workItem from="1651655981652" duration="4741000" />
+      <workItem from="1651655981652" duration="5314000" />
+      <workItem from="1652174338748" duration="1169000" />
     </task>
     <servers />
   </component>
