@@ -1,0 +1,194 @@
+openapi: 3.0.1
+x-amazon-apigateway-minimum-compression-size: 1024
+info:
+  title: Nozoma backoffice api
+  description: This is the API for no
+  version: '2021-03-11T13:53:22Z'
+servers:
+  - url: 'http://localhost:8080'
+paths:
+  /commerces:
+    post:
+      summary: Create a commerce
+      description: Given a request body it creates a commerce
+      operationId: createCommerce
+      tags:
+        - Commerces
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+                - id
+                - email
+                - phone
+                - name
+                - description
+                - address
+              additionalProperties: false
+              type: object
+              properties:
+                id:
+                  description: An uuid (v4) which identifies the commerce in the Commerce Management Service.
+                  type: string
+                  pattern: '^[0-9a-f]{8}\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\b[0-9a-f]{12}$'
+                  example: e4b689e2-c06a-40a1-aac2-5f6d695d7326
+                email:
+                  description: commerce's email.
+                  type: string
+                  example: example-mail@mail.com
+                phone:
+                  description: commerce's phone.
+                  type: string
+                  example: +34 667 25 86 41
+                name:
+                  type: string
+                  description: Commerce's name
+                  example: My commerce
+                description:
+                  type: string
+                  description: Commerce's description
+                  example: This is a description of my awesome commerce
+                address:
+                  type: string
+                  description: Commerce's location
+                  example: Av/Catalunya 1
+            example:
+              id: baed7fdc-6644-4227-8290-35e7d5fe8060
+              name: Ferreteria manuel
+              email: jordi@email.com
+              description: La mejor ferreteria del Pueblo
+              address: Bellpuig
+              phone: 937 83 87 25
+      responses:
+        '200':
+          description: An OK message in JSON format
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    description: An uuid (v4) which identifies the commerce in the Commerce Management Service.
+                    type: string
+                    pattern: '^[0-9a-f]{8}\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\b[0-9a-f]{12}$'
+                    example: e4b689e2-c06a-40a1-aac2-5f6d695d7326
+                  email:
+                    description: commerce's email.
+                    type: string
+                    example: example-mail@mail.com
+                  phone:
+                    description: commerce's phone.
+                    type: string
+                    example: +34 667 25 86 41
+                  name:
+                    type: string
+                    description: Commerce's name
+                    example: My commerce
+                  description:
+                    type: string
+                    description: Commerce's description
+                    example: This is a description of my awesome commerce
+                  address:
+                    type: string
+                    description: Commerce's location
+                    example: Av/Catalunya 1
+                required:
+                  - id
+                  - name
+                  - email
+                  - phone
+                  - description
+                  - address
+                additionalProperties: false
+        '500':
+          description: Internal (and probably unknown) error.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+      x-amazon-apigateway-integration:
+        httpMethod: POST
+        credentials:
+          'Fn::GetAtt': AllowExecuteLambaRole.Arn
+        uri:
+          'Fn::Sub': 'arn:aws:apigateway:eu-west-1:lambda:path/2015-03-31/functions/${PostControllerLambda.Arn}/invocations'
+        passthroughBehavior: when_no_match
+        type: aws_proxy
+  '/commerce/{commerceid}':
+    delete:
+      summary: Delete a commerce
+      description: Given a request id it deletes the commerce
+      operationId: deleteCommerce
+      tags:
+        - Commerces
+      parameters:
+        - name: commerceid
+          in: path
+          schema:
+            - type: string
+              description: An uuid v4.
+              pattern: '^[0-9a-f]{8}\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\b[0-9a-f]{12}$'
+              example: e4b689e2-c06a-40a1-aac2-5f6d695d7326
+          required: true
+      responses:
+        '200':
+          description: A commerce object in JSON format
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    description: An uuid (v4) which identifies the commerce in the Commerce Management Service.
+                    type: string
+                    pattern: '^[0-9a-f]{8}\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\b[0-9a-f]{12}$'
+                    example: e4b689e2-c06a-40a1-aac2-5f6d695d7326
+                  email:
+                    description: commerce's email.
+                    type: string
+                    example: example-mail@mail.com
+                  phone:
+                    description: commerce's phone.
+                    type: string
+                    example: +34 667 25 86 41
+                  name:
+                    type: string
+                    description: Commerce's name
+                    example: My commerce
+                  description:
+                    type: string
+                    description: Commerce's description
+                    example: This is a description of my awesome commerce
+                  address:
+                    type: string
+                    description: Commerce's location
+                    example: Av/Catalunya 1
+                required:
+                  - id
+                  - name
+                  - email
+                  - phone
+                  - description
+                  - address
+                additionalProperties: false
+        '500':
+          description: Internal (and probably unknown) error.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+      x-amazon-apigateway-integration:
+        httpMethod: POST
+        credentials:
+          'Fn::GetAtt': AllowExecuteLambaRole.Arn
+        uri:
+          'Fn::Sub': 'arn:aws:apigateway:eu-west-1:lambda:path/2015-03-31/functions/${GetControllerLambda.Arn}/invocations'
+        passthroughBehavior: when_no_match
+        type: aws_proxy

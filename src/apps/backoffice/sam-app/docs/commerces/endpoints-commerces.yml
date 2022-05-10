@@ -1,0 +1,48 @@
+post:
+  summary: Create a commerce
+  description: 'Given a request body it creates a commerce'
+  operationId: createCommerce
+  tags:
+    - Commerces
+  requestBody:
+    content:
+      application/json:
+        schema:
+          $ref: ./commerce.yml#/Commerce
+          required: [ 'id','email', 'phone', 'name', 'description', 'address' ]
+          additionalProperties: false
+        example:
+          {
+            "id": "baed7fdc-6644-4227-8290-35e7d5fe8060",
+            "name": "Ferreteria manuel",
+            "email": "jordi@email.com",
+            "description": "La mejor ferreteria del Pueblo",
+            "address": "Bellpuig",
+            "phone": "937 83 87 25"
+          }
+  responses:
+    200:
+      description: An OK message in JSON format
+      content:
+        application/json:
+          schema:
+            $ref: ./commerce.yml#/Commerce
+
+    '500':
+      description: Internal (and probably unknown) error.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+  x-amazon-apigateway-integration:
+    httpMethod: POST
+    credentials:
+      'Fn::GetAtt': AllowExecuteLambaRole.Arn
+    uri:
+      'Fn::Sub': >-
+        arn:aws:apigateway:eu-west-1:lambda:path/2015-03-31/functions/${PostControllerLambda.Arn}/invocations
+    passthroughBehavior: when_no_match
+    type: aws_proxy
