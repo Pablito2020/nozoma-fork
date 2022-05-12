@@ -1,1 +1,0 @@
-{"file":"/home/patrick/Downloads/NozomaCDA/src/contexts/shared/domain/InvalidArgumentError.ts","mappings":";;AAAA,MAAqB,oBAAqB,SAAQ,KAAK;CAAG;AAA1D,uCAA0D","names":[],"sources":["/home/patrick/Downloads/NozomaCDA/src/contexts/shared/domain/InvalidArgumentError.ts"],"sourcesContent":["export default class InvalidArgumentError extends Error {}\n"],"version":3}
