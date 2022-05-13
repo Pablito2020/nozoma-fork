@@ -7,7 +7,6 @@ import httpCors from "@middy/http-cors";
 import {DEFINITIONS, register as sharedRegister} from "../shared/dependencies.di";
 import {ContainerBuilder} from "node-dependency-injection";
 import {Logger} from "@shared/domain/Logger";
-import * as console from "console";
 import CommerceSearcherHandler from "@backoffice-contexts/commerces/app/get/CommerceSearcherHandler";
 import {SEARCHER_DEFINITIONS, register as getRegister} from "./dependencies.di";
 import SearchCommerceQuery from "@backoffice-contexts/commerces/app/get/SearchCommerceQuery";
@@ -40,7 +39,6 @@ const logger: Logger = container.get(
                 body: JSON.stringify(commerce.data.toPrimitives())
             };
         } catch (e) {
-            console.info(e);
             if (e instanceof InvalidArgumentError) {
                 return {
                     statusCode: 400,

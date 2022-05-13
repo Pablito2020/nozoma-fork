@@ -21,9 +21,6 @@ describe(CommerceSearcher, () => {
 
         repo.assertFindIdIsCalledWith(expected.id);
     });
-});
-
-describe(CommerceSearcher, () => {
     it('should throw an error if commerce object doesn\'t exist', async () => {
         const repo = new CommerceRepositoryMock(),
             getter = new CommerceSearcher(repo),
