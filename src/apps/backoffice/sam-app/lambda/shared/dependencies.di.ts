@@ -6,6 +6,8 @@ import CommandHandlersInformation from "@shared/infra/bus/command/CommandHandler
 import InMemoryCommandBus from "@shared/infra/bus/command/InMemoryCommandBus";
 import LoggerEventBus from "@shared/infra/bus/event/LoggerEventBus";
 import ConsoleLogger from "@shared/infra/ConsoleLogger";
+import QueryHandlersInformation from "@shared/infra/bus/query/QueryHandlersInformation";
+import InMemoryQueryBus from "@shared/infra/bus/query/InMemoryQueryBus";
 
 const DEFINITIONS = {
         Logger: "Shared.Logger",
@@ -29,13 +31,13 @@ const DEFINITIONS = {
         container.register(DEFINITIONS.Logger, ConsoleLogger);
 
         // Query bus
-        // container
-        //     .register(DEFINITIONS.QueryHandlersInfo, QueryHandlersInformation)
-        //     .addArgument(new TagReference(DEFINITIONS.Tags.QueryHandler));
-        //
-        // container
-        //     .register(DEFINITIONS.MemoryBuses.QueryBus, InMemoryQueryBus)
-        //     .addArgument(new Reference(DEFINITIONS.QueryHandlersInfo));
+        container
+            .register(DEFINITIONS.QueryHandlersInfo, QueryHandlersInformation)
+            .addArgument(new TagReference(DEFINITIONS.Tags.QueryHandler));
+
+        container
+            .register(DEFINITIONS.MemoryBuses.QueryBus, InMemoryQueryBus)
+            .addArgument(new Reference(DEFINITIONS.QueryHandlersInfo));
 
         // CommandBus
         container

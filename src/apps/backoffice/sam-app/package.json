@@ -7,8 +7,8 @@
   },
   "scripts": {
     "build": "rm -rf .dist/ && webpack",
-    "docs:bundle": "swagger-cli bundle swagger.yml -r --outfile .dist/docs/swagger.yml --type yaml",
-    "deploy": "npm docs:bundle && npm build && sam deploy"
+    "docsbundle": "swagger-cli bundle swagger.yml -r --outfile .dist/docs/swagger.yml --type yaml",
+    "deploy": "npm run build && npm run docsbundle && sam deploy"
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.64",
