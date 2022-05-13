@@ -7,5 +7,6 @@ export interface CommerceRepository {
     save(commerce: Commerce) : Promise<void>
     findById(id: UuidVo) : Promise<Nullable<Commerce>>
     findByEmail(email: EmailVo) : Promise<Nullable<Commerce>>
+    delete(commerce: Commerce) : Promise<void>
 }
 

@@ -9,5 +9,5 @@ servers:
 paths:
   /commerces:
     $ref: './docs/commerces/endpoints-commerces.yml'
-  /commerces/{commerceid}:
+  /commerce/{commerceid}:
     $ref: './docs/commerces/endpoints-commerce.yml'

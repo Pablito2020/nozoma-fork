@@ -18,4 +18,5 @@ export default abstract class Aggregate {
     }
 
     abstract toPrimitives(): any;
+
 }
