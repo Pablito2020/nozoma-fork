@@ -5,10 +5,14 @@ import Commerce from '@backoffice-contexts/commerces/domain/Commerce';
 import UuidVo from '@shared/domain/UuidVo';
 
 export default class CommerceRepositoryMock implements CommerceRepository {
+    delete(commerce: Commerce): Promise<void> {
+        return this.deleteMock(commerce)
+    }
 
     readonly findByIdMock = jest.fn();
     readonly findByEmailMock = jest.fn();
     readonly saveMock = jest.fn();
+    readonly deleteMock = jest.fn();
 
     findByEmail(email: EmailVo): Promise<Nullable<Commerce>> {
         return this.findByEmailMock(email);

@@ -7,6 +7,7 @@ import CommerceDescriptionVo from '@backoffice-contexts/commerces/domain/Commerc
 import AddressVo from '@shared/domain/AddressVo';
 import { CommercePrimitives } from '@backoffice-contexts/commerces/domain/CommercePrimitives';
 import CommerceCreatedEvent from '@backoffice-contexts/commerces/domain/CommerceCreatedEvent';
+import CommerceDeletedEvent from "@backoffice-contexts/commerces/domain/CommerceDeletedEvent";
 
 export default class Commerce extends Aggregate {
     constructor(
@@ -67,6 +68,10 @@ export default class Commerce extends Aggregate {
             phone: this.phone.value,
             address: this.address.value,
         };
+    }
+
+    delete(): void {
+        this.record(new CommerceDeletedEvent(this.toPrimitives()))
     }
 
 }

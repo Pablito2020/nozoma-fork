@@ -8,4 +8,7 @@ servers:
   - url: 'http://localhost:8080'
 paths:
   /commerces:
-    $ref: './docs/commerces/endpoints.yml'
+    $ref: './docs/commerces/endpoints-commerces.yml'
+
+  /commerce/{commerceid}:
+    $ref: './docs/commerces/endpoints-commerce.yml'
