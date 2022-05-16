@@ -2,8 +2,8 @@ import { ContainerBuilder, Definition, Reference } from "node-dependency-injecti
 import DynamoCommerceRepository from "@backoffice-contexts/commerces/infra/persistence/dynamodb/DynamoCommerceRepository";
 import { DocumentClient } from "aws-sdk/clients/dynamodb";
 import { DEFINITIONS } from "../shared/dependencies.di";
-import CommerceDeletor from "@backoffice-contexts/commerces/app/Commerce/delete/CommerceDeletor";
-import CommerceDeletorHandler from "@backoffice-contexts/commerces/app/Commerce/delete/DeleteCommerceHandler";
+import CommerceDeletor from "@backoffice-contexts/commerces/app/delete/CommerceDeletor";
+import CommerceDeletorHandler from "@backoffice-contexts/commerces/app/delete/DeleteCommerceHandler";
 
 const DELETE_DEFINITIONS = {
         CommerceDeletor: "CommerceDeletor",

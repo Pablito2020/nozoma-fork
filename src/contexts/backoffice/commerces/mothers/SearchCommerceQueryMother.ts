@@ -1,5 +1,5 @@
-import Commerce from '@backoffice-contexts/commerces/domain/Commerce/Commerce';
-import SearchCommerceQuery from "@backoffice-contexts/commerces/app/Commerce/get/SearchCommerceQuery";
+import Commerce from '@backoffice-contexts/commerces/domain/Commerce';
+import SearchCommerceQuery from "@backoffice-contexts/commerces/app/get/SearchCommerceQuery";
 
 export default class SearchCommerceQueryMother {
     static fromCommerce(commerce: Commerce): SearchCommerceQuery {

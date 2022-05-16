@@ -1,10 +1,10 @@
-import { CommerceRepository } from "@backoffice-contexts/commerces/domain/Commerce/CommerceRepository";
+import { CommerceRepository } from "@backoffice-contexts/commerces/domain/CommerceRepository";
 import EmailVo from "@shared/domain/EmailVo";
 import { Nullable } from "@shared/domain/Nullable";
-import Commerce from "@backoffice-contexts/commerces/domain/Commerce/Commerce";
+import Commerce from "@backoffice-contexts/commerces/domain/Commerce";
 import UuidVo from "@shared/domain/UuidVo";
 import { DocumentClient } from "aws-sdk/clients/dynamodb";
-import { CommercePrimitives } from "@backoffice-contexts/commerces/domain/Commerce/CommercePrimitives";
+import { CommercePrimitives } from "@backoffice-contexts/commerces/domain/CommercePrimitives";
 
 const composeKey = (id: UuidVo) => "commerce:" + id.toString();
 export default class DynamoCommerceRepository implements CommerceRepository {

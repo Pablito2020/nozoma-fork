@@ -7,9 +7,9 @@ import httpCors from "@middy/http-cors";
 import { DEFINITIONS, register as sharedRegister } from "../shared/dependencies.di";
 import { CREATE_DEFINITIONS, register as createRegister } from "./dependencies.di";
 import { ContainerBuilder } from "node-dependency-injection";
-import CommerceCreatorHandler from "@backoffice-contexts/commerces/app/Commerce/create/CommerceCreatorHandler";
+import CommerceCreatorHandler from "@backoffice-contexts/commerces/app/create/CommerceCreatorHandler";
 import { Logger } from "@shared/domain/Logger";
-import CreateCommerceCommand from "@backoffice-contexts/commerces/app/Commerce/create/CreateCommerceCommand";
+import CreateCommerceCommand from "@backoffice-contexts/commerces/app/create/CreateCommerceCommand";
 import AlreadyExists from "@shared/domain/AlreadyExists";
 import * as console from "console";
 

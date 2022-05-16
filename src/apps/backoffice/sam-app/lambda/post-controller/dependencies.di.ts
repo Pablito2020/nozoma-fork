@@ -1,9 +1,9 @@
 import { ContainerBuilder, Definition, Reference } from "node-dependency-injection";
-import CommerceCreator from "@backoffice-contexts/commerces/app/Commerce/create/CommerceCreator";
+import CommerceCreator from "@backoffice-contexts/commerces/app/create/CommerceCreator";
 import DynamoCommerceRepository from "@backoffice-contexts/commerces/infra/persistence/dynamodb/DynamoCommerceRepository";
 import { DocumentClient } from "aws-sdk/clients/dynamodb";
 import { DEFINITIONS } from "../shared/dependencies.di";
-import CommerceCreatorHandler from "@backoffice-contexts/commerces/app/Commerce/create/CommerceCreatorHandler";
+import CommerceCreatorHandler from "@backoffice-contexts/commerces/app/create/CommerceCreatorHandler";
 
 const CREATE_DEFINITIONS = {
         CommerceCreator: "CommerceCreator",

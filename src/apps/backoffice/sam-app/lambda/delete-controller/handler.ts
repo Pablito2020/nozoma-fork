@@ -10,8 +10,8 @@ import { ContainerBuilder } from "node-dependency-injection";
 import { Logger } from "@shared/domain/Logger";
 import AlreadyExists from "@shared/domain/AlreadyExists";
 import * as console from "console";
-import CommerceDeletorHandler from "@backoffice-contexts/commerces/app/Commerce/delete/DeleteCommerceHandler";
-import DeleteCommerceCommand from "@backoffice-contexts/commerces/app/Commerce/delete/DeleteCommerceCommand";
+import CommerceDeletorHandler from "@backoffice-contexts/commerces/app/delete/DeleteCommerceHandler";
+import DeleteCommerceCommand from "@backoffice-contexts/commerces/app/delete/DeleteCommerceCommand";
 
 const container = new ContainerBuilder();
 sharedRegister(container);

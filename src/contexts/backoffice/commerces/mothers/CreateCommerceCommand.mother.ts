@@ -1,5 +1,5 @@
-import CreateCommerceCommand from '@backoffice-contexts/commerces/app/Commerce/create/CreateCommerceCommand';
-import Commerce from '@backoffice-contexts/commerces/domain/Commerce/Commerce';
+import CreateCommerceCommand from '@backoffice-contexts/commerces/app/create/CreateCommerceCommand';
+import Commerce from '@backoffice-contexts/commerces/domain/Commerce';
 
 export default class CreateCommerceCommandMother {
     static fromCommerce(commerce: Commerce): CreateCommerceCommand {

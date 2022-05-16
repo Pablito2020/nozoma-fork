@@ -1,7 +1,7 @@
-import { CommerceRepository } from "@backoffice-contexts/commerces/domain/Commerce/CommerceRepository";
+import { CommerceRepository } from "@backoffice-contexts/commerces/domain/CommerceRepository";
 import EmailVo from "@shared/domain/EmailVo";
 import { Nullable } from "@shared/domain/Nullable";
-import Commerce from "@backoffice-contexts/commerces/domain/Commerce/Commerce";
+import Commerce from "@backoffice-contexts/commerces/domain/Commerce";
 import UuidVo from "@shared/domain/UuidVo";
 import { Collection, Db } from "mongodb";
 
