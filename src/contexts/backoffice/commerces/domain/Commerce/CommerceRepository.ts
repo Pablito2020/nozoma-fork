@@ -1,4 +1,4 @@
-import Commerce from '@backoffice-contexts/commerces/domain/Commerce';
+import Commerce from '@backoffice-contexts/commerces/domain/Commerce/Commerce';
 import { Nullable } from '@shared/domain/Nullable';
 import UuidVo from '@shared/domain/UuidVo';
 import EmailVo from '@shared/domain/EmailVo';

@@ -1,4 +1,4 @@
-import {CommerceRepository} from "@backoffice-contexts/commerces/domain/CommerceRepository";
+import {CommerceRepository} from "@backoffice-contexts/commerces/domain/Commerce/CommerceRepository";
 import {EventBus} from "@shared/domain/bus/event/EventBus";
 import UuidVo from "@shared/domain/UuidVo";
 

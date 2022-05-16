@@ -1,9 +1,9 @@
-import { CommerceRepository } from "@backoffice-contexts/commerces/domain/CommerceRepository";
-import Commerce from "@backoffice-contexts/commerces/domain/Commerce";
+import { CommerceRepository } from "@backoffice-contexts/commerces/domain/Commerce/CommerceRepository";
+import Commerce from "@backoffice-contexts/commerces/domain/Commerce/Commerce";
 import UuidVo from "@shared/domain/UuidVo";
-import CommerceNameVo from "@backoffice-contexts/commerces/domain/CommerceNameVo";
+import CommerceNameVo from "@backoffice-contexts/commerces/domain/Commerce/CommerceNameVo";
 import EmailVo from "@shared/domain/EmailVo";
-import CommerceDescriptionVo from "@backoffice-contexts/commerces/domain/CommerceDescriptionVo";
+import CommerceDescriptionVo from "@backoffice-contexts/commerces/domain/Commerce/CommerceDescriptionVo";
 import PhoneVo from "@shared/domain/PhoneVo";
 import AddressVo from "@shared/domain/AddressVo";
 import { EventBus } from "@shared/domain/bus/event/EventBus";

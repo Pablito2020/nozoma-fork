@@ -7,10 +7,10 @@ import httpCors from "@middy/http-cors";
 import {DEFINITIONS, register as sharedRegister} from "../shared/dependencies.di";
 import {ContainerBuilder} from "node-dependency-injection";
 import {Logger} from "@shared/domain/Logger";
-import CommerceSearcherHandler from "@backoffice-contexts/commerces/app/get/CommerceSearcherHandler";
+import CommerceSearcherHandler from "@backoffice-contexts/commerces/app/Commerce/get/CommerceSearcherHandler";
 import {SEARCHER_DEFINITIONS, register as getRegister} from "./dependencies.di";
-import SearchCommerceQuery from "@backoffice-contexts/commerces/app/get/SearchCommerceQuery";
-import NotExistCommerceException from "@backoffice-contexts/commerces/domain/NotExistsCommerce";
+import SearchCommerceQuery from "@backoffice-contexts/commerces/app/Commerce/get/SearchCommerceQuery";
+import NotExistCommerceException from "@backoffice-contexts/commerces/domain/Commerce/NotExistsCommerce";
 import InvalidArgumentError from "@shared/domain/InvalidArgumentError";
 
 const container = new ContainerBuilder();

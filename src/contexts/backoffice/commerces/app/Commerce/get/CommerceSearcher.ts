@@ -1,7 +1,7 @@
-import {CommerceRepository} from "@backoffice-contexts/commerces/domain/CommerceRepository";
+import {CommerceRepository} from "@backoffice-contexts/commerces/domain/Commerce/CommerceRepository";
 import UuidVo from "@shared/domain/UuidVo";
-import Commerce from "@backoffice-contexts/commerces/domain/Commerce";
-import NotExistCommerceException from "@backoffice-contexts/commerces/domain/NotExistsCommerce";
+import Commerce from "@backoffice-contexts/commerces/domain/Commerce/Commerce";
+import NotExistCommerceException from "@backoffice-contexts/commerces/domain/Commerce/NotExistsCommerce";
 
 
 export default class CommerceSearcher {

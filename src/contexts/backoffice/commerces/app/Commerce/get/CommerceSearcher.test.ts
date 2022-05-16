@@ -1,9 +1,9 @@
 import CommerceRepositoryMock from "@backoffice-contexts/commerces/__mocks__/CommerceRepository.mock";
 import CommerceMother from "@backoffice-contexts/commerces/mothers/Commerce.mother";
-import CommerceSearcherHandler from "@backoffice-contexts/commerces/app/get/CommerceSearcherHandler";
-import CommerceSearcher from "@backoffice-contexts/commerces/app/get/CommerceSearcher";
+import CommerceSearcherHandler from "@backoffice-contexts/commerces/app/Commerce/get/CommerceSearcherHandler";
+import CommerceSearcher from "@backoffice-contexts/commerces/app/Commerce/get/CommerceSearcher";
 import SearchCommerceQueryMother from "@backoffice-contexts/commerces/mothers/SearchCommerceQueryMother";
-import NotExistCommerceException from "@backoffice-contexts/commerces/domain/NotExistsCommerce";
+import NotExistCommerceException from "@backoffice-contexts/commerces/domain/Commerce/NotExistsCommerce";
 
 describe(CommerceSearcher, () => {
     it('should return a commerce object when id exists', async () => {

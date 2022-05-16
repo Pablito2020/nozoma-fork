@@ -1,13 +1,13 @@
 import Aggregate from '@shared/domain/Aggregate';
 import UuidVo from '@shared/domain/UuidVo';
 import PhoneVo from '@shared/domain/PhoneVo';
-import CommerceNameVo from '@backoffice-contexts/commerces/domain/CommerceNameVo';
+import CommerceNameVo from '@backoffice-contexts/commerces/domain/Commerce/CommerceNameVo';
 import EmailVo from '@shared/domain/EmailVo';
-import CommerceDescriptionVo from '@backoffice-contexts/commerces/domain/CommerceDescriptionVo';
+import CommerceDescriptionVo from '@backoffice-contexts/commerces/domain/Commerce/CommerceDescriptionVo';
 import AddressVo from '@shared/domain/AddressVo';
-import { CommercePrimitives } from '@backoffice-contexts/commerces/domain/CommercePrimitives';
-import CommerceCreatedEvent from '@backoffice-contexts/commerces/domain/CommerceCreatedEvent';
-import CommerceDeletedEvent from "@backoffice-contexts/commerces/domain/CommerceDeletedEvent";
+import { CommercePrimitives } from '@backoffice-contexts/commerces/domain/Commerce/CommercePrimitives';
+import CommerceCreatedEvent from '@backoffice-contexts/commerces/domain/Commerce/CommerceCreatedEvent';
+import CommerceDeletedEvent from "@backoffice-contexts/commerces/domain/Commerce/CommerceDeletedEvent";
 
 export default class Commerce extends Aggregate {
     constructor(

@@ -1,4 +1,4 @@
-import CommerceNameVo from '@backoffice-contexts/commerces/domain/CommerceNameVo';
+import CommerceNameVo from '@backoffice-contexts/commerces/domain/Commerce/CommerceNameVo';
 import faker from '@faker-js/faker';
 
 export default class CommerceNameMother {

@@ -1,5 +1,5 @@
 import {DomainEvent} from "@shared/domain/bus/event/DomainEvent";
-import {CommercePrimitives} from "@backoffice-contexts/commerces/domain/CommercePrimitives";
+import {CommercePrimitives} from "@backoffice-contexts/commerces/domain/Commerce/CommercePrimitives";
 
 export default class CommerceDeletedEvent extends DomainEvent {
     static EVENT_NAME = 'backoffice.commerces.CommercDeletedEvent';
