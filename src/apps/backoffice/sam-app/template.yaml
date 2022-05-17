@@ -56,8 +56,8 @@ Resources:
   PostControllerLambda:
     Type: AWS::Serverless::Function
     Properties:
-      FunctionName: !Sub '${AWS::StackName}-post-controller'
-      Handler: post-controller.handler
+      FunctionName: !Sub '${AWS::StackName}-create-product'
+      Handler: create-product.handler
       CodeUri: .dist/webpack
       Environment:
         Variables:
