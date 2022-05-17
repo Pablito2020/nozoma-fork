@@ -10,8 +10,8 @@ import {Logger} from "@shared/domain/Logger";
 import CommerceSearcherHandler from "@backoffice-contexts/commerces/app/get/CommerceSearcherHandler";
 import {SEARCHER_DEFINITIONS, register as getRegister} from "./dependencies.di";
 import SearchCommerceQuery from "@backoffice-contexts/commerces/app/get/SearchCommerceQuery";
-import NotExistCommerceException from "@backoffice-contexts/commerces/domain/NotExistsCommerce";
 import InvalidArgumentError from "@shared/domain/InvalidArgumentError";
+import NotExistsProduct from "@backoffice-contexts/products/domain/NotExistsProduct";
 
 const container = new ContainerBuilder();
 sharedRegister(container);
@@ -42,7 +42,7 @@ const logger: Logger = container.get(DEFINITIONS.Logger),
                     statusCode: 400,
                     body: e.message
                 };
-            } else if (e instanceof NotExistCommerceException) {
+            } else if (e instanceof NotExistsProduct) {
                 return {
                     statusCode: 404,
                     body: e.message

@@ -5,18 +5,19 @@ import { EventAWSBus } from "@shared/domain/bus/event/EventAWSBus";
 export default class AWSEventBus implements EventAWSBus {
 
     async publish(events: Array<DomainEvent>): Promise<void> {
-        console.log("Events to be published:" + JSON.stringify(events))
+        console.log("Events to be published:" + events)
         const eventBridge = new EventBridge()
-        const detail = {round: round.toString()}
+        const entries = []
+        for (const event of events) {
+            entries.push({
+                Source: event.eventName,
+                DetailType: event.eventName,
+                Detail: event.toPrimitives,
+                EventBusName: "pms-ferran-pablo-event-bus"
+            })
+        } 
         const params = {
-            Entries: [
-                {
-                    Source: events.toString(),
-                    DetailType: "create-product-event",
-                    Detail: JSON.stringify(detail),
-                    EventBusName: "create-product-event-bus"
-                },
-            ]
+            Entries: entries
         }
         return eventBridge.putEvents(params).promise()
     }
