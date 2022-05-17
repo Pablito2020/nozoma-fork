@@ -11,3 +11,7 @@ paths:
     $ref: './docs/commerces/endpoints-commerces.yml'
   /commerce/{commerceid}:
     $ref: './docs/commerces/endpoints-commerce.yml'
+  /products:
+    $ref: './docs/products/endpoints-products.yml'
+  /product/{id}:
+    $ref: './docs/products/endpoints-product.yml'

@@ -1,0 +1,4 @@
+ProductDescription:
+  type: string
+  description: Product's description
+  example: 'This is a description of my awesome product'

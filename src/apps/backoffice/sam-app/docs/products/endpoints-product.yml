@@ -1,0 +1,58 @@
+get:
+  summary: Get a product
+  description: 'Given a request id it returns the product'
+  operationId: getProduct
+  tags:
+    - Products
+  parameters:
+    - name: "productId"
+      in: "path"
+      schema:
+        - $ref: "../shared/uuid.yml#/Uuid"
+      required: true
+
+  responses:
+    200:
+      description: A product object in JSON format
+      content:
+        application/json:
+          schema:
+            $ref: ./product.yml#/Product
+    '400':
+      description: Request data format is not valid
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+
+    '404':
+      description: The product doesn't exist
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+    '500':
+      description: Internal (and probably unknown) error.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+
+  x-amazon-apigateway-integration:
+    httpMethod: POST
+    credentials:
+      'Fn::GetAtt': AllowExecuteLambaRole.Arn
+    uri:
+      'Fn::Sub': >-
+        arn:aws:apigateway:eu-west-1:lambda:path/2015-03-31/functions/${GetControllerProductLambda.Arn}/invocations
+    passthroughBehavior: when_no_match
+    type: aws_proxy

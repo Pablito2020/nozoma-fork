@@ -1,0 +1,19 @@
+Product:
+  type: object
+  properties:
+    id:
+      $ref: ../shared/uuid.yml#/Uuid
+      description: An uuid (v4) which identifies the product in the Product Management System.
+    commerceId:
+      $ref: ../shared/uuid.yml#/Uuid
+      description: An uuid (v4) which identifies the commerce related to this product.
+    name:
+      $ref: ./product-name.yml#/ProductName
+    price:
+      $ref: ./product-price.yml#/ProductPrice
+    description:
+      $ref: ./product-description.yml#/ProductDescription
+  required: [ 'id', 'commerceId', 'name', 'price', 'description']
+  additionalProperties: false
+
+

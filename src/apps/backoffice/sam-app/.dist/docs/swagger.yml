@@ -115,10 +115,101 @@ paths:
         credentials:
           'Fn::GetAtt': AllowExecuteLambaRole.Arn
         uri:
-          'Fn::Sub': 'arn:aws:apigateway:eu-west-1:lambda:path/2015-03-31/functions/${PostControllerLambda.Arn}/invocations'
+          'Fn::Sub': 'arn:aws:apigateway:eu-west-1:lambda:path/2015-03-31/functions/${PostControllerCommerceLambda.Arn}/invocations'
         passthroughBehavior: when_no_match
         type: aws_proxy
   '/commerce/{commerceid}':
+    get:
+      summary: Get a commerce
+      description: Given a request id it returns the commerce
+      operationId: getCommerce
+      tags:
+        - Commerces
+      parameters:
+        - name: commerceid
+          in: path
+          schema:
+            - type: string
+              description: An uuid v4.
+              pattern: '^[0-9a-f]{8}\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\b[0-9a-f]{12}$'
+              example: e4b689e2-c06a-40a1-aac2-5f6d695d7326
+          required: true
+      responses:
+        '200':
+          description: A commerce object in JSON format
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    description: An uuid (v4) which identifies the commerce in the Commerce Management Service.
+                    type: string
+                    pattern: '^[0-9a-f]{8}\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\b[0-9a-f]{12}$'
+                    example: e4b689e2-c06a-40a1-aac2-5f6d695d7326
+                  email:
+                    description: commerce's email.
+                    type: string
+                    example: example-mail@mail.com
+                  phone:
+                    description: commerce's phone.
+                    type: string
+                    example: +34 667 25 86 41
+                  name:
+                    type: string
+                    description: Commerce's name
+                    example: My commerce
+                  description:
+                    type: string
+                    description: Commerce's description
+                    example: This is a description of my awesome commerce
+                  address:
+                    type: string
+                    description: Commerce's location
+                    example: Av/Catalunya 1
+                required:
+                  - id
+                  - name
+                  - email
+                  - phone
+                  - description
+                  - address
+                additionalProperties: false
+        '400':
+          description: Request data format is not valid
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+        '404':
+          description: The commerce doesn't exist
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+        '500':
+          description: Internal (and probably unknown) error.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+      x-amazon-apigateway-integration:
+        httpMethod: POST
+        credentials:
+          'Fn::GetAtt': AllowExecuteLambaRole.Arn
+        uri:
+          'Fn::Sub': 'arn:aws:apigateway:eu-west-1:lambda:path/2015-03-31/functions/${GetControllerCommerceLambda.Arn}/invocations'
+        passthroughBehavior: when_no_match
+        type: aws_proxy
     delete:
       summary: Delete a commerce
       description: Given a request id it deletes the commerce
@@ -189,6 +280,196 @@ paths:
         credentials:
           'Fn::GetAtt': AllowExecuteLambaRole.Arn
         uri:
-          'Fn::Sub': 'arn:aws:apigateway:eu-west-1:lambda:path/2015-03-31/functions/${DeleteControllerLambda.Arn}/invocations'
+          'Fn::Sub': 'arn:aws:apigateway:eu-west-1:lambda:path/2015-03-31/functions/${DeleteControllerCommerceLambda.Arn}/invocations'
+        passthroughBehavior: when_no_match
+        type: aws_proxy
+  /products:
+    post:
+      summary: Create a product
+      description: Given a request body it creates a product
+      operationId: createProduct
+      tags:
+        - Products
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+                - id
+                - commerceId
+                - name
+                - price
+                - description
+              additionalProperties: false
+              type: object
+              properties:
+                id:
+                  type: string
+                  description: An uuid v4.
+                  pattern: '^[0-9a-f]{8}\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\b[0-9a-f]{12}$'
+                  example: e4b689e2-c06a-40a1-aac2-5f6d695d7326
+                commerceId:
+                  type: string
+                  description: An uuid v4.
+                  pattern: '^[0-9a-f]{8}\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\b[0-9a-f]{12}$'
+                  example: e4b689e2-c06a-40a1-aac2-5f6d695d7326
+                name:
+                  type: string
+                  description: Product's name
+                  example: My Product
+                price:
+                  type: number
+                  description: Product's price
+                  example: '100'
+                description:
+                  type: string
+                  description: Product's description
+                  example: This is a description of my awesome product
+            example:
+              id: baed7fdc-6644-4227-8290-35e7d5fe8060
+              commerceId: bbxd7fdc-6644-4227-8290-35e7d5fe8060
+              name: KitKat
+              price: '1.00'
+              description: Sweet and chewy as Jordi
+      responses:
+        '200':
+          description: An OK message in JSON format
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: An uuid v4.
+                    pattern: '^[0-9a-f]{8}\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\b[0-9a-f]{12}$'
+                    example: e4b689e2-c06a-40a1-aac2-5f6d695d7326
+                  commerceId:
+                    type: string
+                    description: An uuid v4.
+                    pattern: '^[0-9a-f]{8}\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\b[0-9a-f]{12}$'
+                    example: e4b689e2-c06a-40a1-aac2-5f6d695d7326
+                  name:
+                    type: string
+                    description: Product's name
+                    example: My Product
+                  price:
+                    type: number
+                    description: Product's price
+                    example: '100'
+                  description:
+                    type: string
+                    description: Product's description
+                    example: This is a description of my awesome product
+                required:
+                  - id
+                  - commerceId
+                  - name
+                  - price
+                  - description
+                additionalProperties: false
+        '500':
+          description: Internal (and probably unknown) error.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+      x-amazon-apigateway-integration:
+        httpMethod: POST
+        credentials:
+          'Fn::GetAtt': AllowExecuteLambaRole.Arn
+        uri:
+          'Fn::Sub': 'arn:aws:apigateway:eu-west-1:lambda:path/2015-03-31/functions/${PostControllerProductLambda.Arn}/invocations'
+        passthroughBehavior: when_no_match
+        type: aws_proxy
+  '/product/{id}':
+    get:
+      summary: Get a product
+      description: Given a request id it returns the product
+      operationId: getProduct
+      tags:
+        - Products
+      parameters:
+        - name: productId
+          in: path
+          schema:
+            - type: string
+              description: An uuid v4.
+              pattern: '^[0-9a-f]{8}\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\b[0-9a-f]{12}$'
+              example: e4b689e2-c06a-40a1-aac2-5f6d695d7326
+          required: true
+      responses:
+        '200':
+          description: A product object in JSON format
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: An uuid v4.
+                    pattern: '^[0-9a-f]{8}\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\b[0-9a-f]{12}$'
+                    example: e4b689e2-c06a-40a1-aac2-5f6d695d7326
+                  commerceId:
+                    type: string
+                    description: An uuid v4.
+                    pattern: '^[0-9a-f]{8}\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\b[0-9a-f]{12}$'
+                    example: e4b689e2-c06a-40a1-aac2-5f6d695d7326
+                  name:
+                    type: string
+                    description: Product's name
+                    example: My Product
+                  price:
+                    type: number
+                    description: Product's price
+                    example: '100'
+                  description:
+                    type: string
+                    description: Product's description
+                    example: This is a description of my awesome product
+                required:
+                  - id
+                  - commerceId
+                  - name
+                  - price
+                  - description
+                additionalProperties: false
+        '400':
+          description: Request data format is not valid
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+        '404':
+          description: The product doesn't exist
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+        '500':
+          description: Internal (and probably unknown) error.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+      x-amazon-apigateway-integration:
+        httpMethod: POST
+        credentials:
+          'Fn::GetAtt': AllowExecuteLambaRole.Arn
+        uri:
+          'Fn::Sub': 'arn:aws:apigateway:eu-west-1:lambda:path/2015-03-31/functions/${GetControllerProductLambda.Arn}/invocations'
         passthroughBehavior: when_no_match
         type: aws_proxy

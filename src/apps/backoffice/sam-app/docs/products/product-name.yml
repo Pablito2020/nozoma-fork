@@ -1,0 +1,5 @@
+ProductName:
+  type: string
+  description: Product's name
+  example: 'My Product'
+

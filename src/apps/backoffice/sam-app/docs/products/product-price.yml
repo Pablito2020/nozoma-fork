@@ -1,0 +1,4 @@
+ProductPrice:
+  type: number
+  description: Product's price
+  example: '100'
