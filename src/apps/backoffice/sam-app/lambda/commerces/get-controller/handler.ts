@@ -4,14 +4,14 @@ import {APIGatewayProxyEvent, APIGatewayProxyHandler, Context} from "aws-lambda"
 import middy from "@middy/core";
 import httpCors from "@middy/http-cors";
 
-import {DEFINITIONS, register as sharedRegister} from "../shared/dependencies.di";
+import {DEFINITIONS, register as sharedRegister} from "../../shared/dependencies.di";
 import {ContainerBuilder} from "node-dependency-injection";
 import {Logger} from "@shared/domain/Logger";
-import CommerceSearcherHandler from "@backoffice-contexts/commerces/app/get/CommerceSearcherHandler";
 import {SEARCHER_DEFINITIONS, register as getRegister} from "./dependencies.di";
-import SearchCommerceQuery from "@backoffice-contexts/commerces/app/get/SearchCommerceQuery";
-import NotExistCommerceException from "@backoffice-contexts/commerces/domain/NotExistsCommerce";
 import InvalidArgumentError from "@shared/domain/InvalidArgumentError";
+import ProductSearcherHandler from "@backoffice-contexts/products/app/get/ProductSearcherHandler";
+import SearchProductQuery from "@backoffice-contexts/products/app/get/SearchProductQuery";
+import NotExistsProductException from "@backoffice-contexts/products/domain/NotExistsProduct";
 
 const container = new ContainerBuilder();
 sharedRegister(container);
@@ -20,7 +20,7 @@ getRegister(container);
 const logger: Logger = container.get(
     DEFINITIONS.Logger
 ),
-    handlerGetter: CommerceSearcherHandler = container.get(
+    handlerGetter: ProductSearcherHandler = container.get(
         SEARCHER_DEFINITIONS.Handler
     ),
     execute: APIGatewayProxyHandler = async (
@@ -31,12 +31,12 @@ const logger: Logger = container.get(
         logger.info(`REQUEST PATH parameters: ${event.pathParameters}`);
         logger.info(`REQUEST BODY: ${event.body}`);
         try {
-            const id = event?.pathParameters?.commerceid as string,
-                searchCommerceQuery = new SearchCommerceQuery(id),
-                commerce = await handlerGetter.handle(searchCommerceQuery);
+            const id = event?.pathParameters?.id as string,
+                searchProductQuery = new SearchProductQuery(id),
+                product = await handlerGetter.handle(searchProductQuery);
             return {
                 statusCode: 200,
-                body: JSON.stringify(commerce.data.toPrimitives())
+                body: JSON.stringify(product.data.toPrimitives())
             };
         } catch (e) {
             if (e instanceof InvalidArgumentError) {
@@ -44,7 +44,7 @@ const logger: Logger = container.get(
                     statusCode: 400,
                     body: e.message
                 };
-            } else if (e instanceof NotExistCommerceException) {
+            } else if (e instanceof NotExistsProductException) {
                 return {
                     statusCode: 404,
                     body: e.message
