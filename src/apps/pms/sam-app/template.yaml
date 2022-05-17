@@ -17,51 +17,16 @@ Resources:
   ###############################
   #### API GATEWAY          #####
   ###############################
-  ApiGatewayRestApi2:
-    Type: AWS::Serverless::Api
-    Properties:
-      StageName: 'develop'
-      MinimumCompressionSize: 1024
-      OpenApiVersion: '3.0.1'
-      DefinitionBody:
-        'Fn::Transform':
-          Name: AWS::Include
-          Parameters:
-            Location: .dist/docs/swagger.yml
 
-  AllowExecuteLambaRole:
-    Type: AWS::IAM::Role
-    Properties:
-      Path: /
-      RoleName: !Sub ${AWS::StackName}-api-execution-role
-      AssumeRolePolicyDocument:
-        Version: '2012-10-17'
-        Statement:
-          - Effect: Allow
-            Principal:
-              Service:
-                - apigateway.amazonaws.com
-            Action: sts:AssumeRole
-      Policies:
-        - PolicyName: !Sub ${AWS::StackName}-allow-execute-lamba-policy
-          PolicyDocument:
-            Version: '2012-10-17'
-            Statement:
-              - Effect: Allow
-                Action:
-                  - lambda:InvokeFunction
-                Resource:
-                  - !Sub 'arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:${AWS::StackName}-*'
-
-  PostControllerLambda:
+  CreateProductLambda:
     Type: AWS::Serverless::Function
     Properties:
-      FunctionName: !Sub '${AWS::StackName}-post-controller'
-      Handler: post-controller.handler
+      FunctionName: !Sub '${AWS::StackName}-create-product-controller'
+      Handler: create-product.handler
       CodeUri: .dist/webpack
       Environment:
         Variables:
-          TABLE_NAME: !Sub '${AWS::StackName}-backoffice-dynamodb-table'
+          TABLE_NAME: !Sub '${AWS::StackName}-pms-dynamodb-table'
       Policies:
         - Statement:
             - Effect: Allow
@@ -77,32 +42,10 @@ Resources:
                 - !Sub '${Dynamodb.Arn}/index/*'
 
 
-  GetControllerLambda:
-    Type: AWS::Serverless::Function
-    Properties:
-      FunctionName: !Sub '${AWS::StackName}-get-controller'
-      Handler: get-controller.handler
-      CodeUri: .dist/webpack
-      Environment:
-        Variables:
-          TABLE_NAME: !Sub '${AWS::StackName}-backoffice-dynamodb-table'
-      Policies:
-        - Statement:
-            - Effect: Allow
-              Action:
-                - dynamodb:GetItem
-              Resource:
-                - !GetAtt Dynamodb.Arn
-            - Effect: Allow
-              Action:
-                - dynamodb:Query
-              Resource:
-                - !Sub '${Dynamodb.Arn}/index/*'
-
   Dynamodb:
     Type: AWS::DynamoDB::Table
     Properties:
-      TableName: !Sub '${AWS::StackName}-backoffice-dynamodb-table'
+      TableName: !Sub '${AWS::StackName}-pms-dynamodb-table'
       ProvisionedThroughput:
         ReadCapacityUnits: 5
         WriteCapacityUnits: 5
@@ -124,3 +67,38 @@ Resources:
           ProvisionedThroughput:
             ReadCapacityUnits: 5
             WriteCapacityUnits: 5
+
+  EventBus:
+    Type: AWS::Events::EventBus
+    Properties:
+      Name: !Sub "${AWS::StackName}-event-bus"
+
+  # Define the event pattern, specify the patterns, and the bus used
+  CreateProductEventRule:
+    Type: AWS::Events::Rule
+    Properties:
+      Description: "Create product event"
+      EventBusName: !Sub "${AWS::StackName}-event-bus"
+      EventPattern:
+        source:
+          - "backoffice.product.ProductCreatedEvent"
+      State: "ENABLED"
+      Targets:
+        - Arn:
+            Fn::GetAtt:
+              - "CreateProductLambda"
+              - "Arn"
+          Id: "CreateProductServiceTarget"
+
+  # Resource that grants permission to EventBridge to invoke the target.
+  CreateProductLambdaInvokePermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName:
+        Ref: "CreateProductLambda"
+      Action: "lambda:InvokeFunction"
+      Principal: "events.amazonaws.com"
+      SourceArn:
+        Fn::GetAtt:
+          - "CreateProductEventRule"
+          - "Arn"

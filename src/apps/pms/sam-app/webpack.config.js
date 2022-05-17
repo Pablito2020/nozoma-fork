@@ -56,7 +56,7 @@ module.exports = {
         cacheWithContext: false,
         alias: {
             "@shared": path.resolve(__dirname, "../../../contexts/shared"),
-            "@backoffice-contexts": path.resolve(__dirname, "../../../contexts/backoffice")
+            "@pms-contexts": path.resolve(__dirname, "../../../contexts/pms")
         }
     },
     target: "node",
