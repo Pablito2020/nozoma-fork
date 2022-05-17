@@ -4,11 +4,13 @@ import DynamoProductRepository from "@backoffice-contexts/products/infra/persist
 import { DocumentClient } from "aws-sdk/clients/dynamodb";
 import { DEFINITIONS } from "../../shared/dependencies.di";
 import ProductCreatorHandler from "@backoffice-contexts/products/app/create/ProductCreatorHandler";
+import AWSEventBus from "@shared/infra/bus/event/AWSEventBus";
 
 const CREATE_DEFINITIONS = {
         ProductCreator: "ProductCreator",
         ProductRepository: "ProductRepository",
-        Handler: "ProductCreatorHandler"
+        Handler: "ProductCreatorHandler",
+        EventBus: "AWSEventBus"
     },
 
     register = (container: ContainerBuilder): void => {
@@ -23,6 +25,9 @@ const CREATE_DEFINITIONS = {
             .register(CREATE_DEFINITIONS.ProductCreator, ProductCreator)
             .addArgument(new Reference(CREATE_DEFINITIONS.ProductRepository))
             .addArgument(new Reference(DEFINITIONS.MemoryBuses.EventBus));
+        
+        container.register(CREATE_DEFINITIONS.EventBus, AWSEventBus)
+            .addArgument(new Reference(DEFINITIONS.Logger))
 
         const definition = new Definition(ProductCreatorHandler);
         definition.addArgument(new Reference(CREATE_DEFINITIONS.ProductCreator));

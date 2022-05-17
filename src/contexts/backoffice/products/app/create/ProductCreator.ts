@@ -5,12 +5,13 @@ import ProductNameVo from "@backoffice-contexts/products/domain/ProductNameVo";
 import ProductPriceVo from "@backoffice-contexts/products/domain/ProductPriceVo";
 import ProductDescriptionVo from "@backoffice-contexts/products/domain/ProductDescriptionVo";
 import {ProductRepository} from "../../domain/ProductRepository";
-import { EventAWSBus } from "@shared/domain/bus/event/EventAWSBus";
+import { EventBus } from "@shared/domain/bus/event/EventBus";
+
 
 export default class ProductCreator {
     constructor(
         readonly repo: ProductRepository,
-        readonly eventBus: EventAWSBus
+        readonly eventBus: EventBus
     ) {
     }
 

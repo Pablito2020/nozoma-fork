@@ -5,6 +5,7 @@ import DynamoProductRepository from "@backoffice-contexts/products/infra/persist
 import {DocumentClient} from "aws-sdk/clients/dynamodb";
 import ProductSearcherHandler from "@backoffice-contexts/products/app/get/ProductSearcherHandler";
 
+
 const SEARCHER_DEFINITIONS = {
         ProductSearcher: "ProductSearcher",
         ProductRepository: "ProductRepository",
@@ -17,10 +18,9 @@ const SEARCHER_DEFINITIONS = {
             .addArgument(new DocumentClient())
             .addArgument(process.env.TABLE_NAME)
             .addArgument("productId");
-
+        
         container.register(SEARCHER_DEFINITIONS.ProductSearcher, ProductSearcher)
-            .addArgument(new Reference(SEARCHER_DEFINITIONS.ProductRepository))
-            .addArgument(new Reference(DEFINITIONS.MemoryBuses.EventBus));
+            .addArgument(new Reference(SEARCHER_DEFINITIONS.ProductRepository));
 
 
         const definition = new Definition(ProductSearcherHandler);
@@ -30,3 +30,4 @@ const SEARCHER_DEFINITIONS = {
     };
 
 export {register, SEARCHER_DEFINITIONS};
+
