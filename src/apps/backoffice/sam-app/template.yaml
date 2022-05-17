@@ -53,11 +53,13 @@ Resources:
                 Resource:
                   - !Sub 'arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:${AWS::StackName}-*'
 
-  PostControllerLambda:
+# Product related
+
+  PostControllerProductLambda:
     Type: AWS::Serverless::Function
     Properties:
-      FunctionName: !Sub '${AWS::StackName}-post-controller'
-      Handler: post-controller.handler
+      FunctionName: !Sub '${AWS::StackName}-post-controller-product'
+      Handler: post-controller-product.handler
       CodeUri: .dist/webpack
       Environment:
         Variables:
@@ -75,12 +77,16 @@ Resources:
                 - dynamodb:Query
               Resource:
                 - !Sub '${Dynamodb.Arn}/index/*'
-            
-  GetControllerLambda:
+            - Effect: Allow
+              Resource: '*'
+              Action:
+                - events:PutEvents
+
+  GetControllerProductLambda:
     Type: AWS::Serverless::Function
     Properties:
-      FunctionName: !Sub '${AWS::StackName}-get-controller'
-      Handler: get-controller.handler
+      FunctionName: !Sub '${AWS::StackName}-get-controller-product'
+      Handler: get-controller-product.handler
       CodeUri: .dist/webpack
       Environment:
         Variables:
@@ -97,13 +103,59 @@ Resources:
                 - dynamodb:Query
               Resource:
                 - !Sub '${Dynamodb.Arn}/index/*'
-                
-                
-  DeleteControllerLambda:
+
+# Commerce Related
+
+  PostControllerCommerceLambda:
     Type: AWS::Serverless::Function
     Properties:
-      FunctionName: !Sub '${AWS::StackName}-delete-controller'
-      Handler: delete-controller.handler
+      FunctionName: !Sub '${AWS::StackName}-post-controller-commerce'
+      Handler: post-controller-commerce.handler
+      CodeUri: .dist/webpack
+      Environment:
+        Variables:
+          TABLE_NAME: !Sub '${AWS::StackName}-backoffice-dynamodb-table'
+      Policies:
+        - Statement:
+            - Effect: Allow
+              Action:
+                - dynamodb:PutItem
+                - dynamodb:GetItem
+              Resource:
+                - !GetAtt Dynamodb.Arn
+            - Effect: Allow
+              Action:
+                - dynamodb:Query
+              Resource:
+                - !Sub '${Dynamodb.Arn}/index/*'
+
+  GetControllerCommerceLambda:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub '${AWS::StackName}-get-controller-commerce'
+      Handler: get-controller-commerce.handler
+      CodeUri: .dist/webpack
+      Environment:
+        Variables:
+          TABLE_NAME: !Sub '${AWS::StackName}-backoffice-dynamodb-table'
+      Policies:
+        - Statement:
+            - Effect: Allow
+              Action:
+                - dynamodb:GetItem
+              Resource:
+                - !GetAtt Dynamodb.Arn
+            - Effect: Allow
+              Action:
+                - dynamodb:Query
+              Resource:
+                - !Sub '${Dynamodb.Arn}/index/*'
+
+  DeleteControllerCommerceLambda:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub '${AWS::StackName}-delete-controller-commerce'
+      Handler: delete-controller-commerce.handler
       CodeUri: .dist/webpack
       Environment:
         Variables:
