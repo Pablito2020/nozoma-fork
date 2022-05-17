@@ -4,14 +4,14 @@ import { APIGatewayProxyEvent, APIGatewayProxyHandler, Context } from "aws-lambd
 import middy from "@middy/core";
 import httpCors from "@middy/http-cors";
 
-import { DEFINITIONS, register as sharedRegister } from "../shared/dependencies.di";
-import { CREATE_DEFINITIONS, register as createRegister } from "./dependencies.di";
+import { DEFINITIONS, register as sharedRegister } from "../../shared/dependencies.di";
+import { DELETE_DEFINITIONS, register as createRegister } from "./dependencies.di";
 import { ContainerBuilder } from "node-dependency-injection";
-import CommerceCreatorHandler from "@backoffice-contexts/commerces/app/create/CommerceCreatorHandler";
 import { Logger } from "@shared/domain/Logger";
-import CreateCommerceCommand from "@backoffice-contexts/commerces/app/create/CreateCommerceCommand";
 import AlreadyExists from "@shared/domain/AlreadyExists";
 import * as console from "console";
+import CommerceDeletorHandler from "@backoffice-contexts/commerces/app/delete/DeleteCommerceHandler";
+import DeleteCommerceCommand from "@backoffice-contexts/commerces/app/delete/DeleteCommerceCommand";
 
 const container = new ContainerBuilder();
 sharedRegister(container);
@@ -20,8 +20,8 @@ createRegister(container);
 const logger: Logger = container.get(
     DEFINITIONS.Logger
 ),
-    handlerCreator: CommerceCreatorHandler = container.get(
-        CREATE_DEFINITIONS.Handler
+    handlerDeletor: CommerceDeletorHandler = container.get(
+        DELETE_DEFINITIONS.Handler
     ),
     execute: APIGatewayProxyHandler = async (
         event: APIGatewayProxyEvent,
@@ -31,21 +31,16 @@ const logger: Logger = container.get(
         logger.info(`REQUEST BODY: ${event.body}`);
         try {
             const {
-                    name,
-                    email,
-                    description,
-                    address,
-                    id,
-                    phone
+                    id
                 } = JSON.parse(event.body as string),
-                createCommerceCommand = new CreateCommerceCommand(
-                    id, name, email, description, phone, address
+                deleteCommerceCommand = new DeleteCommerceCommand(
+                    id
                 ),
-                commerce = await handlerCreator.handle(createCommerceCommand);
+                commerce = await handlerDeletor.handle(deleteCommerceCommand);
 
             return {
                 statusCode: 200,
-                body: JSON.stringify(commerce.data.toPrimitives())
+                body: JSON.stringify(commerce)
             };
         } catch (e) {
             console.info(e);

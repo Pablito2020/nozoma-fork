@@ -1,6 +1,6 @@
 import CommerceSearcherHandler from "@backoffice-contexts/commerces/app/get/CommerceSearcherHandler";
 import {ContainerBuilder, Definition, Reference} from "node-dependency-injection";
-import {DEFINITIONS} from "../shared/dependencies.di";
+import {DEFINITIONS} from "../../shared/dependencies.di";
 import CommerceSearcher from "@backoffice-contexts/commerces/app/get/CommerceSearcher";
 import DynamoCommerceRepository from "@backoffice-contexts/commerces/infra/persistence/dynamodb/DynamoCommerceRepository";
 import {DocumentClient} from "aws-sdk/clients/dynamodb";
