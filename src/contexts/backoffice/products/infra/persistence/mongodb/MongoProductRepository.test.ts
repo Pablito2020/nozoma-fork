@@ -1,7 +1,6 @@
 import { MongoClient } from "mongodb";
 import MongoProductRepository from "@backoffice-contexts/products/infra/persistence/mongodb/MongoProductRepository";
 import ProductMother from "@backoffice-contexts/products/mothers/Product.mother";
-import ProductCreator from "@backoffice-contexts/products/app/create/ProductCreator";
 import Product from "@backoffice-contexts/products/domain/Product";
 import UuidVo from "@shared/domain/UuidVo";
 import ProductNameVo from "@backoffice-contexts/products/domain/ProductNameVo";
@@ -43,7 +42,7 @@ describe(MongoProductRepository, () => {
             new UuidVo("-1"),
             new UuidVo(""),
             new ProductNameVo(""),
-            new ProductPriceVo(""),
+            new ProductPriceVo(0),
             new ProductDescriptionVo(""))
 
         // eslint-disable-next-line one-var

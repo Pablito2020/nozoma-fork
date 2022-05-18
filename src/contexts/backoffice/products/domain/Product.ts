@@ -52,6 +52,17 @@ export default class Product extends Aggregate {
         )
     }
 
+    // static fromPrimitives1(primitives: ProductPrimitives): Product {
+    //     return new Product(
+    //         new UuidVo(primitives.id),
+    //         new UuidVo(commerceId),
+    //         new ProductNameVo(name),
+    //         new ProductPriceVo(price),
+    //         new ProductDescriptionVo(description),
+    //     )
+    // }
+
+
     toPrimitives(): ProductPrimitives {
         return {
             id: this.id.value,

@@ -4,7 +4,7 @@ import UuidVo from "@shared/domain/UuidVo";
 import { Collection, Db } from "mongodb";
 import {ProductRepository} from "@backoffice-contexts/products/domain/ProductRepository";
 
-const COLLECTION = "Commerces";
+const COLLECTION = "Products";
 export default class MongoProductRepository implements ProductRepository {
     private collection: Collection<any>;
 

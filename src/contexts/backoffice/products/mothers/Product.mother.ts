@@ -10,7 +10,7 @@ import ProductPriceMother from "./ProductPrice.mother";
 
 export default class ProductMother {
 
-    static random(): ProductMother {
+    static random(): Product {
         return ProductMother.create(
             UuidMother.random(),
             UuidMother.random(),
@@ -25,7 +25,7 @@ export default class ProductMother {
         price: ProductPriceVo,
         productName: ProductNameVo,
         productDescription: ProductDescriptionVo       
-        ):  ProductMother {
+        ):  Product {
                 return new Product(id,commerceId,productName,price,productDescription,
             );
     }

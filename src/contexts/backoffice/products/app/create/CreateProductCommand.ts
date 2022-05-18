@@ -5,7 +5,7 @@ export default class CreateProductCommand implements Command {
         readonly id: string,
         readonly commerceId: string,
         readonly name: string,
-        readonly price: string,
+        readonly price: number,
         readonly description: string,
     ) {
     }
