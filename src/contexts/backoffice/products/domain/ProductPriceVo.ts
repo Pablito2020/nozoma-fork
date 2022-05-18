@@ -1,3 +1,4 @@
-import StringVo from '@shared/domain/StringVo';
+import NumberVo from '@shared/domain/NumberVo';
 
-export default class ProductPriceVo extends StringVo{}
+
+export default class ProductPriceVo extends NumberVo{}
