@@ -58,8 +58,8 @@ Resources:
   PostControllerProductLambda:
     Type: AWS::Serverless::Function
     Properties:
-      FunctionName: !Sub '${AWS::StackName}-post-controller-product'
-      Handler: post-controller-product.handler
+      FunctionName: !Sub '${AWS::StackName}-post-controller'
+      Handler: products/post-controller.handler
       CodeUri: .dist/webpack
       Environment:
         Variables:
@@ -85,8 +85,8 @@ Resources:
   GetControllerProductLambda:
     Type: AWS::Serverless::Function
     Properties:
-      FunctionName: !Sub '${AWS::StackName}-get-controller-product'
-      Handler: get-controller-product.handler
+      FunctionName: !Sub '${AWS::StackName}-get-controller'
+      Handler: products/get-controller.handler
       CodeUri: .dist/webpack
       Environment:
         Variables:
@@ -109,8 +109,8 @@ Resources:
   PostControllerCommerceLambda:
     Type: AWS::Serverless::Function
     Properties:
-      FunctionName: !Sub '${AWS::StackName}-post-controller-commerce'
-      Handler: post-controller-commerce.handler
+      FunctionName: !Sub '${AWS::StackName}-post-controller'
+      Handler: commerces/post-controller.handler
       CodeUri: .dist/webpack
       Environment:
         Variables:
@@ -132,8 +132,8 @@ Resources:
   GetControllerCommerceLambda:
     Type: AWS::Serverless::Function
     Properties:
-      FunctionName: !Sub '${AWS::StackName}-get-controller-commerce'
-      Handler: get-controller-commerce.handler
+      FunctionName: !Sub '${AWS::StackName}-get-controller'
+      Handler: commerces/get-controller.handler
       CodeUri: .dist/webpack
       Environment:
         Variables:
@@ -154,8 +154,8 @@ Resources:
   DeleteControllerCommerceLambda:
     Type: AWS::Serverless::Function
     Properties:
-      FunctionName: !Sub '${AWS::StackName}-delete-controller-commerce'
-      Handler: delete-controller-commerce.handler
+      FunctionName: !Sub '${AWS::StackName}-delete-controller'
+      Handler: commerces/delete-controller.handler
       CodeUri: .dist/webpack
       Environment:
         Variables:
