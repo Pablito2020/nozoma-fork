@@ -7,7 +7,7 @@ import ProductPriceVo from "@backoffice-contexts/products/domain/ProductPriceVo"
 import ProductCreatedEvent from "@backoffice-contexts/products/domain/ProductCreatedEvent";
 
 
-export default class Commerce extends Aggregate {
+export default class Product extends Aggregate {
     constructor(
         readonly id: UuidVo,
         readonly commerceId: UuidVo,
@@ -24,8 +24,8 @@ export default class Commerce extends Aggregate {
         name: ProductNameVo,
         price: ProductPriceVo,
         description: ProductDescriptionVo,
-    ): Commerce {
-        const product = new Commerce(
+    ): Product {
+        const product = new Product(
             id,
             commerceId,
             name,
@@ -42,8 +42,8 @@ export default class Commerce extends Aggregate {
         name,
         price,
         description,
-    }: ProductPrimitives): Commerce {
-        return new Commerce(
+    }: ProductPrimitives): Product {
+        return new Product(
             new UuidVo(id),
             new UuidVo(commerceId),
             new ProductNameVo(name),

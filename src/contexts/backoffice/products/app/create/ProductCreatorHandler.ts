@@ -8,7 +8,7 @@ import ProductPriceVo from "@backoffice-contexts/products/domain/ProductPriceVo"
 import ProductDescriptionVo from "@backoffice-contexts/products/domain/ProductDescriptionVo";
 import ProductCreator from "@backoffice-contexts/products/app/create/ProductCreator";
 
-export default class CommerceProductHandler implements CommandHandler<CreateProductCommand,
+export default class ProductCreatorHandler implements CommandHandler<CreateProductCommand,
     CreateProductResponse> {
     constructor(private creator: ProductCreator) {
     }
