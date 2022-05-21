@@ -14,15 +14,6 @@ describe(DynamoProductRepository, () => {
     let repo: DynamoProductRepository;
     beforeAll(() => {
         client = new DocumentClient()
-
-        // {
-        //     endpoint: "http://localhost:4566/",
-        //     region: "eu-west-1",
-        //     credentials: {
-        //         accessKeyId: "test",
-        //         secretAccessKey: "test"
-        //     }
-        // });
         repo = new DynamoProductRepository(client, TABLE_NAME, PRODUCT_ID);
     });
 
@@ -42,7 +33,7 @@ describe(DynamoProductRepository, () => {
             new UuidVo("-1"),
             new UuidVo(""),
             new ProductNameVo(""),
-            new ProductPriceVo(""),
+            new ProductPriceVo(0),
             new ProductDescriptionVo(""))
 
         // eslint-disable-next-line one-var

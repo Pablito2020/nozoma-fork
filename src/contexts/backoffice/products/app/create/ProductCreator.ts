@@ -6,12 +6,15 @@ import ProductPriceVo from "@backoffice-contexts/products/domain/ProductPriceVo"
 import ProductDescriptionVo from "@backoffice-contexts/products/domain/ProductDescriptionVo";
 import {ProductRepository} from "../../domain/ProductRepository";
 import { EventBus } from "@shared/domain/bus/event/EventBus";
+import {CommerceRepository} from "@backoffice-contexts/commerces/domain/CommerceRepository";
+import NotExistCommerceException from "@backoffice-contexts/commerces/domain/NotExistsCommerce";
 
 
 export default class ProductCreator {
     constructor(
         readonly repo: ProductRepository,
-        readonly eventBus: EventBus
+        readonly eventBus: EventBus,
+        readonly commerceRepo: CommerceRepository
     ) {
     }
 
@@ -22,6 +25,11 @@ export default class ProductCreator {
         price: ProductPriceVo,
         description: ProductDescriptionVo,
     ): Promise<Product> {
+        const possibleCommerceId = this.commerceRepo.findById(commerceId)
+        if(possibleCommerceId === null) {
+            throw new NotExistCommerceException("Commerce with id" + id + "doesn't exist")
+        }
+        // eslint-disable-next-line one-var
         const product = Product.create(
                 id,
                 commerceId,

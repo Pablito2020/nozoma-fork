@@ -4,7 +4,7 @@ import { Logger } from "@shared/domain/Logger";
 import {EventBridge} from "aws-sdk";
 import { PutEventsRequestEntry } from "aws-sdk/clients/cloudwatchevents";
 
-export default class AWSEventBus implements EventBus {
+export default class EventBridgeEventBus implements EventBus {
     
     constructor(readonly logger:Logger){
     }
@@ -17,7 +17,7 @@ export default class AWSEventBus implements EventBus {
             entries.push({
                 Source: event.eventName,
                 DetailType: event.eventName,
-                Detail: JSON.stringify(event.toPrimitives),
+                Detail: JSON.stringify(event.toPrimitives()),
                 EventBusName: "nozoma-ferran-pablo-joel-patrick-event-bus"
             })
         } 

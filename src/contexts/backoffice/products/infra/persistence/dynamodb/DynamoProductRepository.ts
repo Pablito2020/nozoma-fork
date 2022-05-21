@@ -7,7 +7,7 @@ import {ProductPrimitives} from "@backoffice-contexts/products/domain/ProductPri
 
 const composeKey = (id: UuidVo) => "product:" + id.toString();
 export default class DynamoProductRepository implements ProductRepository {
-    constructor(private client: DocumentClient, readonly tableName: string, readonly emailIndex: string) {
+    constructor(private client: DocumentClient, readonly tableName: string, readonly productId: string) {
     }
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
