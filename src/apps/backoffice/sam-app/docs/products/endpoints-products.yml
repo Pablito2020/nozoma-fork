@@ -1,0 +1,47 @@
+post:
+  summary: Create a product
+  description: 'Given a request body it creates a product'
+  operationId: createProduct
+  tags:
+    - Products
+  requestBody:
+    content:
+      application/json:
+        schema:
+          $ref: ./product.yml#/Product
+          required: [ 'id', 'commerceId', 'name', 'price', 'description']
+          additionalProperties: false
+        example:
+          {
+            "id": "baed7fdc-6644-4227-8290-35e7d5fe8060",
+            "commerceId": "bbxd7fdc-6644-4227-8290-35e7d5fe8060",
+            "name": "KitKat",
+            "price": "1.00",
+            "description": "Sweet and chewy as Jordi"
+          }
+  responses:
+    200:
+      description: An OK message in JSON format
+      content:
+        application/json:
+          schema:
+            $ref: ./product.yml#/Product
+
+    '500':
+      description: Internal (and probably unknown) error.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+  x-amazon-apigateway-integration:
+    httpMethod: POST
+    credentials:
+      'Fn::GetAtt': AllowExecuteLambaRole.Arn
+    uri:
+      'Fn::Sub': >-
+        arn:aws:apigateway:eu-west-1:lambda:path/2015-03-31/functions/${PostControllerProductLambda.Arn}/invocations
+    passthroughBehavior: when_no_match
+    type: aws_proxy

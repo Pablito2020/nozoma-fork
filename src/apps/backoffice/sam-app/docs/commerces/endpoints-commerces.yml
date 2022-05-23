@@ -43,6 +43,6 @@ post:
       'Fn::GetAtt': AllowExecuteLambaRole.Arn
     uri:
       'Fn::Sub': >-
-        arn:aws:apigateway:eu-west-1:lambda:path/2015-03-31/functions/${PostControllerLambda.Arn}/invocations
+        arn:aws:apigateway:eu-west-1:lambda:path/2015-03-31/functions/${PostControllerCommerceLambda.Arn}/invocations
     passthroughBehavior: when_no_match
     type: aws_proxy
