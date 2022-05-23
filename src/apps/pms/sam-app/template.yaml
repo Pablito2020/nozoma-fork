@@ -52,21 +52,9 @@ Resources:
       AttributeDefinitions:
         - AttributeName: partitionKey
           AttributeType: S
-        - AttributeName: email
-          AttributeType: S
       KeySchema:
         - AttributeName: partitionKey
           KeyType: HASH
-      GlobalSecondaryIndexes:
-        - IndexName: emailIndex
-          KeySchema:
-            - AttributeName: email
-              KeyType: HASH
-          Projection:
-            ProjectionType: ALL
-          ProvisionedThroughput:
-            ReadCapacityUnits: 5
-            WriteCapacityUnits: 5
 
   EventBus:
     Type: AWS::Events::EventBus
