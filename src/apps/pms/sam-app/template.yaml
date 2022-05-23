@@ -18,29 +18,46 @@ Resources:
   #### API GATEWAY          #####
   ###############################
 
-  CreateProductLambda:
-    Type: AWS::Serverless::Function
+  ApiGatewayRestApi2:
+    Type: AWS::Serverless::Api
     Properties:
-      FunctionName: !Sub '${AWS::StackName}-create-product-controller'
-      Handler: create-product.handler
-      CodeUri: .dist/webpack
-      Environment:
-        Variables:
-          TABLE_NAME: !Sub '${AWS::StackName}-pms-dynamodb-table'
-      Policies:
-        - Statement:
-            - Effect: Allow
-              Action:
-                - dynamodb:PutItem
-                - dynamodb:GetItem
-              Resource:
-                - !GetAtt Dynamodb.Arn
-            - Effect: Allow
-              Action:
-                - dynamodb:Query
-              Resource:
-                - !Sub '${Dynamodb.Arn}/index/*'
+      StageName: 'develop'
+      MinimumCompressionSize: 1024
+      OpenApiVersion: '3.0.1'
+      DefinitionBody:
+        'Fn::Transform':
+          Name: AWS::Include
+          Parameters:
+            Location: .dist/docs/swagger.yml
 
+  AllowExecuteLambdaRole:
+    Type: AWS::IAM::Role
+    Properties:
+      Path: /
+      RoleName: !Sub ${AWS::StackName}-api-execution-role
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - apigateway.amazonaws.com
+            Action: sts:AssumeRole
+      Policies:
+        - PolicyName: !Sub ${AWS::StackName}-allow-execute-lambda-policy
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - lambda:InvokeFunction
+                Resource:
+                  - !Sub 'arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:${AWS::StackName}-*'
+
+
+  ###############################
+  ####   Dynamo Database    #####
+  ###############################
 
   Dynamodb:
     Type: AWS::DynamoDB::Table
@@ -55,6 +72,24 @@ Resources:
       KeySchema:
         - AttributeName: partitionKey
           KeyType: HASH
+
+  DynamodbCart:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: !Sub '${AWS::StackName}-cart-dynamodb-table'
+      ProvisionedThroughput:
+        ReadCapacityUnits: 5
+        WriteCapacityUnits: 5
+      AttributeDefinitions:
+        - AttributeName: partitionKey
+          AttributeType: S
+      KeySchema:
+        - AttributeName: partitionKey
+          KeyType: HASH
+
+  ###############################
+  ####      EVENT BUS       #####
+  ###############################
 
   EventBus:
     Type: AWS::Events::EventBus
@@ -90,3 +125,57 @@ Resources:
         Fn::GetAtt:
           - "CreateProductEventRule"
           - "Arn"
+
+  ###############################
+  ####      LAMBDA         #####
+  ###############################
+
+  CreateProductLambda:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub '${AWS::StackName}-create-product-controller'
+      Handler: create-product.handler
+      CodeUri: .dist/webpack
+      Environment:
+        Variables:
+          TABLE_NAME: !Sub '${AWS::StackName}-pms-dynamodb-table'
+      Policies:
+        - Statement:
+            - Effect: Allow
+              Action:
+                - dynamodb:PutItem
+                - dynamodb:GetItem
+              Resource:
+                - !GetAtt Dynamodb.Arn
+            - Effect: Allow
+              Action:
+                - dynamodb:Query
+              Resource:
+                - !Sub '${Dynamodb.Arn}/index/*'
+
+  PostControllerCartLambda:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub '${AWS::StackName}-post-cart-controller'
+      Handler: post-cart-controller.handler
+      CodeUri: .dist/webpack
+      Environment:
+        Variables:
+          TABLE_NAME: !Sub '${AWS::StackName}-cart-dynamodb-table'
+      Policies:
+        - Statement:
+            - Effect: Allow
+              Action:
+                - dynamodb:PutItem
+                - dynamodb:GetItem
+              Resource:
+                - !GetAtt DynamodbCart.Arn
+            - Effect: Allow
+              Action:
+                - dynamodb:Query
+              Resource:
+                - !Sub '${DynamodbCart.Arn}/index/*'
+            - Effect: Allow
+              Resource: '*'
+              Action:
+                - events:PutEvents

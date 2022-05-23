@@ -4,8 +4,8 @@ import Product from "@pms-contexts/carts/domain/CartPrimitives";
 export default class CreateCartCommand implements Command {
     constructor(
         readonly id: string,
-        readonly products: Array<Product>,
-        readonly isBought: boolean
+        readonly products: Array<Product> = new Array<Product>(),
+        readonly isBought: boolean = false
     ) {
     }
 }

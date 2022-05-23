@@ -1,0 +1,58 @@
+post:
+  summary: Add a product to the cart
+  description: 'Given a product id, add it to the cart'
+  operationId: addProductToCart
+  tags:
+    - Cart
+  parameters:
+    - name: "id"
+      in: "path"
+      schema:
+        - $ref: "../shared/uuid.yml#/Uuid"
+      required: true
+  requestBody:
+    content:
+      application/json:
+        schema:
+          $ref: ../shared/uuid.yml#/Uuid
+        example:
+          {
+            "id": "baed7fdc-6644-4227-8290-35e7d5fe8060",
+          }
+  responses:
+    200:
+      description: An OK message in JSON format
+      content:
+        application/json:
+          schema:
+            $ref: ./cart.yml#/Cart
+
+    400:
+      description: An error message in JSON format
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+
+    '500':
+      description: Internal (and probably unknown) error.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+
+  x-amazon-apigateway-integration:
+    httpMethod: POST
+    credentials:
+      'Fn::GetAtt': AllowExecuteLambdaRole.Arn
+    uri:
+      'Fn::Sub': >-
+        arn:aws:apigateway:eu-west-1:lambda:path/2015-03-31/functions/${PostControllerCartLambda.Arn}/invocations
+    passthroughBehavior: when_no_match
+    type: aws_proxy

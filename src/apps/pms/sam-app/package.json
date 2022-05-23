@@ -6,8 +6,9 @@
     "npm": ">=6.7.0"
   },
   "scripts": {
-    "build": "rm -rf .dist/ && webpack",
-    "deploy": "npm run build && sam deploy"
+    "build": "rm -rf .dist/ && webpack --stats-error-details",
+    "docsbundle": "swagger-cli bundle swagger.yml -r --outfile .dist/docs/swagger.yml --type yaml",
+    "deploy": "npm run build && npm run docsbundle && sam deploy"
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.64",

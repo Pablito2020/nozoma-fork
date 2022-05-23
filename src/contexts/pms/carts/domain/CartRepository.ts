@@ -1,5 +1,5 @@
 import Cart from "@pms-contexts/carts/domain/Cart";
 
-export interface CartRepository {
+export default interface CartRepository {
     save(cart: Cart): Promise<void>
 }

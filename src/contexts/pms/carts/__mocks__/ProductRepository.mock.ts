@@ -1,14 +1,14 @@
 import {Nullable} from '@shared/domain/Nullable';
 import UuidVo from '@shared/domain/UuidVo';
-import {ProductRepository} from "@pms-contexts/products/domain/ProductRepository";
-import Product from "@pms-contexts/products/domain/Product";
+import CartRepository from "@pms-contexts/carts/domain/CartRepository";
+import Cart from "@pms-contexts/carts/domain/Cart";
 
-export default class ProductRepositoryMock implements ProductRepository {
+export default class CartRepositoryMock implements CartRepository {
 
     readonly findByIdMock = jest.fn();
     readonly saveMock = jest.fn();
 
-    findById(id: UuidVo): Promise<Nullable<Product>> {
+    findById(id: UuidVo): Promise<Nullable<Cart>> {
         return this.findByIdMock(id);
     }
 
@@ -17,17 +17,17 @@ export default class ProductRepositoryMock implements ProductRepository {
             .toHaveBeenCalledWith(id);
     }
 
-    whenFindByIdThenReturn(product: Nullable<Product>): void {
-        this.findByIdMock.mockResolvedValue(product);
+    whenFindByIdThenReturn(cart: Nullable<Cart>): void {
+        this.findByIdMock.mockResolvedValue(cart);
     }
 
-    save(product: Product): Promise<void> {
-        return this.saveMock(product);
+    save(cart: Cart): Promise<void> {
+        return this.saveMock(cart);
     }
 
-    assertSaveIsCalledWith(product: Product): void {
+    assertSaveIsCalledWith(cart: Cart): void {
         expect(this.saveMock)
-            .toHaveBeenCalledWith(product);
+            .toHaveBeenCalledWith(cart);
     }
 
     assertSaveIsNotCalled(): void {

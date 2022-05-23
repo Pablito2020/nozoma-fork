@@ -1,7 +1,7 @@
 import UuidVo from "@shared/domain/UuidVo";
 import ProductListVo from "@pms-contexts/carts/domain/ProductListVo";
 import Cart from "@pms-contexts/carts/domain/Cart";
-import {CartRepository} from "@pms-contexts/carts/domain/CartRepository";
+import CartRepository from "@pms-contexts/carts/domain/CartRepository";
 
 export default class CartCreator {
     constructor(
