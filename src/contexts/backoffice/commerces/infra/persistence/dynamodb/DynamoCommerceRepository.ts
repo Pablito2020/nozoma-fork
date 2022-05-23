@@ -11,6 +11,18 @@ export default class DynamoCommerceRepository implements CommerceRepository {
     constructor(private client: DocumentClient, readonly tableName: string, readonly emailIndex: string) {
     }
 
+    async delete(commerce: Commerce): Promise<void> {
+        const key = composeKey(commerce.id)
+        await this.client.delete({
+            TableName: this.tableName,
+            Key: {
+                partitionKey: key,
+                ...commerce.toPrimitives()
+            }
+        })
+            .promise()
+    }
+
     async findByEmail(email: EmailVo): Promise<Nullable<Commerce>> {
         const resp = await this.client.query({
             TableName: this.tableName,

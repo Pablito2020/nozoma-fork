@@ -6,12 +6,13 @@
     "npm": ">=6.7.0"
   },
   "scripts": {
-    "build": "rm -rf .dist/ && webpack",
+    "build": "rm -rf .dist/ && webpack --stats-error-details",
     "docsbundle": "swagger-cli bundle swagger.yml -r --outfile .dist/docs/swagger.yml --type yaml",
     "deploy": "npm run build && npm run docsbundle && sam deploy"
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.64",
+    "@types/aws-sdk" : "^2.7.0",
     "@types/jest": "^26.0.20",
     "@types/node": "^14.14.20",
     "@typescript-eslint/eslint-plugin": "^5.15.0",

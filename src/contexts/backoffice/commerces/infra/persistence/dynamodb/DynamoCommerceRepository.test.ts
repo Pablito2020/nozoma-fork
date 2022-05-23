@@ -3,19 +3,21 @@ import { DocumentClient } from "aws-sdk/clients/dynamodb";
 import CommerceMother from "@backoffice-contexts/commerces/mothers/Commerce.mother";
 
 describe(DynamoCommerceRepository, () => {
-    const TABLE_NAME = "nozoma-backoffice",
+    const TABLE_NAME = "backoffice-jordi-sapes-backoffice-dynamodb-table",
         EMAIL_INDEX_NAME = "emailIndex";
     let client: DocumentClient;
     let repo: DynamoCommerceRepository;
     beforeAll(() => {
-        client = new DocumentClient({
-            endpoint: "http://localhost:4566/",
-            region: "eu-west-1",
-            credentials: {
-                accessKeyId: "test",
-                secretAccessKey: "test"
-            }
-        });
+        client = new DocumentClient()
+
+        // {
+        //     endpoint: "http://localhost:4566/",
+        //     region: "eu-west-1",
+        //     credentials: {
+        //         accessKeyId: "test",
+        //         secretAccessKey: "test"
+        //     }
+        // });
         repo = new DynamoCommerceRepository(client, TABLE_NAME, EMAIL_INDEX_NAME);
     });
 

@@ -2,7 +2,7 @@ version = 0.1
 [default]
 [default.deploy]
 [default.deploy.parameters]
-stack_name = "backoffice-ferran-pablo"
+stack_name = "backoffice-joel-patrick"
 s3_bucket = "sandbox-eu-west-one-udl"
 s3_prefix = "udlpractices"
 region = "eu-west-1"
