@@ -11,6 +11,7 @@ import CartCreatorHandler from "@pms-contexts/carts/app/create/CartCreatorHandle
 import {Logger} from "@shared/domain/Logger";
 import CreateCartCommand from "@pms-contexts/carts/app/create/CreateCartCommand";
 import InvalidArgumentError from "@shared/domain/InvalidArgumentError";
+import AlreadyExists from "@shared/domain/AlreadyExists";
 
 const container = new ContainerBuilder();
 sharedRegister(container);
@@ -40,7 +41,7 @@ const logger: Logger = container.get(
             };
         } catch (e) {
             logger.error((e as Error).message);
-            if (e instanceof InvalidArgumentError) {
+            if (e instanceof (InvalidArgumentError || AlreadyExists)) {
                 return {
                     statusCode: 400,
                     body: e.message
