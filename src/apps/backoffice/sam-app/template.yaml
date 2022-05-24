@@ -199,5 +199,40 @@ Resources:
             ReadCapacityUnits: 5
             WriteCapacityUnits: 5
 
+  #EventBus Related
+
+  EventBus:
+    Type: AWS::Events::EventBus
+    Properties:
+      Name: !Sub "${AWS::StackName}-event-bus"
+
+  PutCartLambdaInvokePermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName:
+        Ref: "PutCartLambda"
+      Action: "lambda:InvokeFunction"
+      Principal: "events.amazonaws.com"
+      SourceArn:
+        Fn::GetAtt:
+          - "PutCartEventRule"
+          - "Arn"
+
+  PutCartEventRule:
+    Type: AWS::Events::Rule
+    Properties:
+      Description: "Put cart event"
+      EventBusName: !Sub "${AWS::StackName}-event-bus"
+      EventPattern:
+        source:
+          - "backoffice.product.ProductCreatedEvent"
+      State: "ENABLED"
+      Targets:
+        - Arn:
+            Fn::GetAtt:
+              - "PutCartLambda"
+              - "Arn"
+          Id: "PutCartServiceTarget"
+
 
 
