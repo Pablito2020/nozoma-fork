@@ -28,7 +28,7 @@ export default class Facture extends Aggregate implements Cart{
                 }
             }
             factures[0][i] = info[i].commerceId
-        }
+        }z
 
         for(let i = 0; i< info.length; i++) {
             if(factures[0][i] === info[i].commerceId) {
