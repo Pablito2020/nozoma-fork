@@ -1,13 +1,12 @@
 import Aggregate from '@shared/domain/Aggregate';
 import UuidVo from '@shared/domain/UuidVo';
-import ProductListVo from "@pms-contexts/carts/domain/ProductListVo";
+import CartProductList from "@pms-contexts/carts/domain/CartProductList";
 import {CartPrimitives} from "@pms-contexts/carts/domain/CartPrimitives";
-import ProductVo from "@pms-contexts/carts/domain/ProductVo";
 
 export default class Cart extends Aggregate {
     constructor(
         readonly id: UuidVo,
-        readonly products: ProductListVo,
+        readonly products: CartProductList,
         readonly isBought: boolean
     ) {
         super();
@@ -15,7 +14,7 @@ export default class Cart extends Aggregate {
 
     static create(
         id: UuidVo,
-        products: ProductListVo,
+        products: CartProductList,
         isBought: boolean
     ): Cart {
         return new Cart(
@@ -32,7 +31,7 @@ export default class Cart extends Aggregate {
     }: CartPrimitives): Cart {
         return new Cart(
             new UuidVo(id),
-            new ProductListVo(products),
+            new CartProductList(products),
             isBought
         )
     }
@@ -40,7 +39,7 @@ export default class Cart extends Aggregate {
     toPrimitives(): CartPrimitives {
         return {
             id: this.id.value,
-            products: this.products.value.map((product: ProductVo) => {return product.value}),
+            products: this.products.getCartProductPrimitives(),
             isBought: this.isBought
         };
     }

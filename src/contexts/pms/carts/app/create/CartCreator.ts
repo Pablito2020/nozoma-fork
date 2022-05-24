@@ -1,5 +1,5 @@
 import UuidVo from "@shared/domain/UuidVo";
-import ProductListVo from "@pms-contexts/carts/domain/ProductListVo";
+import CartProductList from "@pms-contexts/carts/domain/CartProductList";
 import Cart from "@pms-contexts/carts/domain/Cart";
 import CartRepository from "@pms-contexts/carts/domain/CartRepository";
 
@@ -11,7 +11,7 @@ export default class CartCreator {
 
     async run(
         id: UuidVo,
-        products: ProductListVo,
+        products: CartProductList,
         isBought: boolean
     ): Promise<Cart> {
         const cart = Cart.create(

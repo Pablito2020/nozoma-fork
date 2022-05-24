@@ -1,11 +1,7 @@
+import CartProductPrimitives from "@pms-contexts/carts/domain/CartProductPrimitives";
 
 export type CartPrimitives = {
     id: string;
-    products: Array<Product>;
+    products: Array<CartProductPrimitives>;
     isBought: boolean;
-}
-
-export default interface Product {
-    productId: string,
-    commerceId: string
 }

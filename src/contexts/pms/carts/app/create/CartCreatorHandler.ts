@@ -4,7 +4,7 @@ import UuidVo from "@shared/domain/UuidVo";
 import CreateCartResponse from "@pms-contexts/carts/app/create/CreateCartResponse";
 import CreateCartCommand from "@pms-contexts/carts/app/create/CreateCartCommand";
 import CartCreator from "@pms-contexts/carts/app/create/CartCreator";
-import ProductListVo from "@pms-contexts/carts/domain/ProductListVo";
+import CartProductList from "@pms-contexts/carts/domain/CartProductList";
 
 export default class CartCreatorHandler implements CommandHandler<CreateCartCommand,
     CreateCartResponse> {
@@ -18,7 +18,7 @@ export default class CartCreatorHandler implements CommandHandler<CreateCartComm
     }: CreateCartCommand): Promise<CreateCartResponse> {
         const response = await this.creator.run(
             new UuidVo(id),
-            new ProductListVo(products),
+            new CartProductList(products),
             isBought
         );
         return new CreateCartResponse(response);
