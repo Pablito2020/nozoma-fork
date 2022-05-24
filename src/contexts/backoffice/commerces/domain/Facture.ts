@@ -2,11 +2,11 @@ import Aggregate from '@shared/domain/Aggregate';
 import CartProduct from "@backoffice-contexts/commerces/domain/CartProduct";
 import Cart from "@backoffice-contexts/commerces/domain/CartProduct";
 
-export default class Facture extends Aggregate implements Cart{
+export default class Facture extends Aggregate{
     constructor(
-        cart: Array<Cart> = [],
+        /*cart: Array<Cart> = [],
         info: Array<CartProduct> = [],
-        facture: Array<string> = []
+        facture: Array<string> = []*/
     ) {
         super();
     }
@@ -28,7 +28,7 @@ export default class Facture extends Aggregate implements Cart{
                 }
             }
             factures[0][i] = info[i].commerceId
-        }z
+        }
 
         for(let i = 0; i< info.length; i++) {
             if(factures[0][i] === info[i].commerceId) {
