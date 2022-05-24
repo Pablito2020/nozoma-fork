@@ -234,5 +234,9 @@ Resources:
               - "Arn"
           Id: "PutCartServiceTarget"
 
+  #SQS
 
-
+  GenerateBillSqs:
+    Type: AWS::SQS::Queue
+    Properties:
+      QueueName: !Sub ${AWS::StackName}-generate-bill-sqs
