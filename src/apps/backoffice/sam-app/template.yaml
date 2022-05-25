@@ -200,69 +200,53 @@ Resources:
             WriteCapacityUnits: 5
 
   #EventBus Related
-<<<<<<< HEAD
 
   EventBus:
     Type: AWS::Events::EventBus
     Properties:
       Name: !Sub "${AWS::StackName}-event-bus"
 
-  PutCartLambdaInvokePermission:
-    Type: AWS::Lambda::Permission
-    Properties:
-      FunctionName:
-        Ref: "PutCartLambda"
-      Action: "lambda:InvokeFunction"
-      Principal: "events.amazonaws.com"
-      SourceArn:
-        Fn::GetAtt:
-          - "PutCartEventRule"
-          - "Arn"
+  #CartRelated
 
-  PutCartEventRule:
-    Type: AWS::Events::Rule
-    Properties:
-      Description: "Put cart event"
-      EventBusName: !Sub "${AWS::StackName}-event-bus"
-      EventPattern:
-        source:
-          - "backoffice.product.ProductCreatedEvent"
-      State: "ENABLED"
-      Targets:
-        - Arn:
-            Fn::GetAtt:
-              - "PutCartLambda"
-              - "Arn"
-          Id: "PutCartServiceTarget"
+  # PutCartLambdaInvokePermission:
+  #   Type: AWS::Lambda::Permission
+  #   Properties:
+  #     FunctionName:
+  #       Ref: "PutCartLambda"
+  #     Action: "lambda:InvokeFunction"
+  #     Principal: "events.amazonaws.com"
+  #     SourceArn:
+  #       Fn::GetAtt:
+  #         - "PutCartEventRule"
+  #         - "Arn"
 
-=======
->>>>>>> 9dcdefa4a7f6411113f19d574a542b44244402f3
+  # PutCartEventRule:
+  #   Type: AWS::Events::Rule
+  #   Properties:
+  #     Description: "Put cart event"
+  #     EventBusName: !Sub "${AWS::StackName}-event-bus"
+  #     EventPattern:
+  #       source:
+  #         - "backoffice.product.ProductCreatedEvent"
+  #     State: "ENABLED"
+  #     Targets:
+  #       - Arn:
+  #           Fn::GetAtt:
+  #             - "PutCartLambda"
+  #             - "Arn"
+  #         Id: "PutCartServiceTarget"
 
-<<<<<<< HEAD
-  GenerateBillSQS:
-    Type: AWS::SQS::Queue
-    Properties:
-      QueueName: !Sub "${AWS::StackName}-Queue"
-
-
-=======
-  EventBus:
-    Type: AWS::Events::EventBus
-    Properties:
-      Name: !Sub "${AWS::StackName}-event-bus"
->>>>>>> feat-backoffice-cart
-
-  PutCartLambdaInvokePermission:
-    Type: AWS::Lambda::Permission
-    Properties:
-      FunctionName:
-        Ref: "PutCartLambda"
-      Action: "lambda:InvokeFunction"
-      Principal: "events.amazonaws.com"
-      SourceArn:
-        Fn::GetAtt:
-          - "PutCartEventRule"
-          - "Arn"
+  # PutCartLambdaInvokePermission:
+  #   Type: AWS::Lambda::Permission
+  #   Properties:
+  #     FunctionName:
+  #       Ref: "PutCartLambda"
+  #     Action: "lambda:InvokeFunction"
+  #     Principal: "events.amazonaws.com"
+  #     SourceArn:
+  #       Fn::GetAtt:
+  #         - "PutCartEventRule"
+  #         - "Arn"
 
   PutCartEventRule:
     Type: AWS::Events::Rule
@@ -286,3 +270,34 @@ Resources:
     Type: AWS::SQS::Queue
     Properties:
       QueueName: !Sub ${AWS::StackName}-generate-bill-sqs
+
+
+  #CartRelated
+
+  GetCartDataLambda:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub '${AWS::StackName}-post-cart-controller'
+      Handler: carts/post-cart-controller.handler
+      CodeUri: .dist/webpack
+      Environment:
+        Variables:
+          QUEUE_URL: 'https://.........'
+      Policies:
+        - Statement:
+          - Effect: Allow
+            Action:
+              - sqs:SendMessage
+            Resource:
+              - ArnQueue
+          
+      Events:
+        SQSEvent:
+          Type: SQS
+          Properties:
+            Queue: !GetAtt GenerateBillSqs.Arn
+            Enabled: true
+    
+
+
+
