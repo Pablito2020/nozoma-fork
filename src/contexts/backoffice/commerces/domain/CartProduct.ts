@@ -1,5 +1,3 @@
-import PriceVo from "@pms-contexts/products/domain/PriceVo";
-
 export default interface CartProduct  {
     commerceId: string,
     productId: string,

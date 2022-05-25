@@ -2,11 +2,9 @@ import Aggregate from '@shared/domain/Aggregate';
 import CartProduct from "@backoffice-contexts/commerces/domain/CartProduct";
 import Cart from "@backoffice-contexts/commerces/domain/CartProduct";
 
-export default class Facture extends Aggregate{
+export default class Facture extends Aggregate {
     constructor(
-        /*cart: Array<Cart> = [],
-        info: Array<CartProduct> = [],
-        facture: Array<string> = []*/
+        readonly cart: Cart
     ) {
         super();
     }
@@ -14,28 +12,58 @@ export default class Facture extends Aggregate{
     static create(
         cart: Array<Cart>,
         info: Array<CartProduct>,
-    ): Facture {
-        var factures = new Array(info.length)
-        for(let i = 0; i < cart.length; i++) {
+    ): any[] {
+        const factures = new Array(info.length);
+        for (let i = 0; i < cart.length; i++) {
             info[i] = cart[i].products
         }
 
+        factures.fill(0, 0, factures.length)
+
         //assignar commerceid a les factures
-        for(let i = 0; i < info.length; i++) {
-            for(let j = 0; j < info.length; j++) {
-                if(factures[0][j] === info[j].commerceId) {
-                    factures[0][i] = info[i].commerceId
+        var alreadyAdded = false
+        for (let i = 0; i < info.length; i++) {
+            for (let j = 0; j < info.length; j++) {
+                if (factures[0][j] === info[i].commerceId) {
+                    alreadyAdded = true
                 }
             }
-            factures[0][i] = info[i].commerceId
+            if (!alreadyAdded) {
+                factures[0][i] = info[i].commerceId
+            }
         }
 
-        for(let i = 0; i< info.length; i++) {
-            if(factures[0][i] === info[i].commerceId) {
-                for(let j = 0; j < info.length; j++) {
-                    if(factures[i][j] === )
+        //omplir factura amb productes i price
+        let isFill = false;
+        for (let i = 0; i < info.length; i++) {
+            isFill = false
+            for (let j = 0; j < info.length; j++) {
+                if (factures[0][j] === info[i].commerceId && !isFill) {
+                    for (let k = 1; k < info.length; k++) {                             //fill columns with productId + price
+                        if (factures[k][j] === null && !isFill) {
+                            factures[k][j] = info[j].price
+                            isFill = true
+                        }
+                    }
                 }
             }
         }
+
+
+        //get total price
+        let total = 0
+        for(let i = 0; i < info.length; i++) {
+            for(let j = 1; j < info.length; j++) {
+                total += factures[j][i]
+            }
+            factures[factures.length - 1][i] = "Total = " + total
+        }
+        return factures
     }
+
+    toPrimitives() {
+        throw new Error('Method not implemented.');
+    }
+
 }
+
