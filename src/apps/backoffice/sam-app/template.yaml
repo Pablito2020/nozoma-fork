@@ -235,4 +235,10 @@ Resources:
           Id: "PutCartServiceTarget"
 
 
+  GenerateBillSQS:
+    Type: AWS::SQS::Queue
+    Properties:
+      QueueName: !Sub "${AWS::StackName}-Queue"
+
+
 
