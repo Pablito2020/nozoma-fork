@@ -5,4 +5,5 @@ import {Nullable} from "@shared/domain/Nullable";
 export default interface CartRepository {
     save(cart: Cart): Promise<void>
     findById(id: UuidVo): Promise<Nullable<Cart>>
+    update(cart: Cart): Promise<Nullable<Cart>>
 }

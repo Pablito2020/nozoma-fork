@@ -2,6 +2,7 @@ import Aggregate from '@shared/domain/Aggregate';
 import UuidVo from '@shared/domain/UuidVo';
 import CartProductList from "@pms-contexts/carts/domain/CartProductList";
 import {CartPrimitives} from "@pms-contexts/carts/domain/CartPrimitives";
+import Product from "@pms-contexts/products/domain/Product";
 
 export default class Cart extends Aggregate {
     constructor(
@@ -42,6 +43,14 @@ export default class Cart extends Aggregate {
             products: this.products.getCartProductPrimitives(),
             isBought: this.isBought
         };
+    }
+
+    addProduct(product: Product): Cart  {
+        return new Cart(
+            this.id,
+            this.products.addProduct(product.id, product.commerceId, product.price),
+            this.isBought
+        )
     }
 
 }

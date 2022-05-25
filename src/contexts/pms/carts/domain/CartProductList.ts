@@ -20,4 +20,14 @@ export default class CartProductList {
         })
     }
 
+    addProduct(productId: UuidVo, commerceId: UuidVo, price: PriceVo): CartProductList {
+        const newProducts = this.getCartProductPrimitives()
+        newProducts.push({
+            productId: productId.value,
+            commerceId: commerceId.value,
+            price: price.value
+        });
+        return new CartProductList(newProducts)
+    }
+
 }

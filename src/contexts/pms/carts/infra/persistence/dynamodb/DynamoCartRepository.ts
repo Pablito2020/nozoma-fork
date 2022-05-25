@@ -32,4 +32,9 @@ export default class DynamoCartRepository implements CartRepository {
         return resp.Item ? Cart.fromPrimitives({...resp.Item} as CartPrimitives) : null;
     }
 
+    async update(cart: Cart): Promise<Nullable<Cart>> {
+        console.log(cart)
+        return null
+    }
+
 }
