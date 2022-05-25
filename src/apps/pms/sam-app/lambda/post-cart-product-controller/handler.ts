@@ -6,15 +6,18 @@ import httpCors from "@middy/http-cors";
 
 import {ContainerBuilder} from "node-dependency-injection";
 import {Logger} from "@shared/domain/Logger";
-import {SEARCHER_DEFINITIONS} from "./dependencies.di";
+import { DEFINITIONS, register as sharedRegister } from "../shared/dependencies.di";
+import { CREATE_DEFINITIONS, register as createRegister } from "./dependencies.di";
+import AddCartProductCommand from "../../../../../contexts/pms/carts/app/add_product/AddCartProductCommand";
+import CartProductAdderHandler from "../../../../../contexts/pms/carts/app/add_product/CartProductAdderHandler";
 
 const container = new ContainerBuilder();
 sharedRegister(container);
 createRegister(container);
 // eslint-disable-next-line one-var
 const logger: Logger = container.get(DEFINITIONS.Logger),
-    handlerCreator: CartProductCreatorHandler = container.get(
-        SEARCHER_DEFINITIONS.Handler
+    handlerCreator: CartProductAdderHandler = container.get(
+        CREATE_DEFINITIONS.Handler
     ),
     execute: APIGatewayProxyHandler = async (
         event: APIGatewayProxyEvent,
@@ -28,7 +31,7 @@ const logger: Logger = container.get(DEFINITIONS.Logger),
                 {
                     productId
                 } = JSON.parse(event.body as string),
-                createCartProductCommand = new CreateCartProductCommand(cartId, productId),
+                createCartProductCommand = new AddCartProductCommand(cartId, productId),
                 cart = await handlerCreator.handle(createCartProductCommand)
             return {
                 statusCode: 200,
