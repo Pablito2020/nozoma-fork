@@ -1,0 +1,92 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: Practice 1
+Transform:
+  - AWS::Serverless-2016-10-31
+Globals:
+  Function:
+    Runtime: nodejs14.x
+    Timeout: 30
+    MemorySize: 1024
+    Environment:
+      Variables:
+        USERNAME: Jordi
+        NODE_OPTIONS: --enable-source-maps
+        AWS_NODEJS_CONNECTION_REUSE_ENABLED: 1
+
+Resources:
+  ###############################
+  #### API GATEWAY          #####
+  ###############################
+
+  CreateProductLambda:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub '${AWS::StackName}-create-product-controller'
+      Handler: create-product.handler
+      CodeUri: .dist/webpack
+      Environment:
+        Variables:
+          TABLE_NAME: !Sub '${AWS::StackName}-pms-dynamodb-table'
+      Policies:
+        - Statement:
+            - Effect: Allow
+              Action:
+                - dynamodb:PutItem
+                - dynamodb:GetItem
+              Resource:
+                - !GetAtt Dynamodb.Arn
+            - Effect: Allow
+              Action:
+                - dynamodb:Query
+              Resource:
+                - !Sub '${Dynamodb.Arn}/index/*'
+
+
+  Dynamodb:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: !Sub '${AWS::StackName}-pms-dynamodb-table'
+      ProvisionedThroughput:
+        ReadCapacityUnits: 5
+        WriteCapacityUnits: 5
+      AttributeDefinitions:
+        - AttributeName: partitionKey
+          AttributeType: S
+      KeySchema:
+        - AttributeName: partitionKey
+          KeyType: HASH
+
+  EventBus:
+    Type: AWS::Events::EventBus
+    Properties:
+      Name: !Sub "${AWS::StackName}-event-bus"
+
+  # Define the event pattern, specify the patterns, and the bus used
+  CreateProductEventRule:
+    Type: AWS::Events::Rule
+    Properties:
+      Description: "Create product event"
+      EventBusName: !Sub "${AWS::StackName}-event-bus"
+      EventPattern:
+        source:
+          - "backoffice.product.ProductCreatedEvent"
+      State: "ENABLED"
+      Targets:
+        - Arn:
+            Fn::GetAtt:
+              - "CreateProductLambda"
+              - "Arn"
+          Id: "CreateProductServiceTarget"
+
+  # Resource that grants permission to EventBridge to invoke the target.
+  CreateProductLambdaInvokePermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName:
+        Ref: "CreateProductLambda"
+      Action: "lambda:InvokeFunction"
+      Principal: "events.amazonaws.com"
+      SourceArn:
+        Fn::GetAtt:
+          - "CreateProductEventRule"
+          - "Arn"

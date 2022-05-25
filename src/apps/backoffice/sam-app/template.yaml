@@ -200,6 +200,7 @@ Resources:
             WriteCapacityUnits: 5
 
   #EventBus Related
+<<<<<<< HEAD
 
   EventBus:
     Type: AWS::Events::EventBus
@@ -234,5 +235,45 @@ Resources:
               - "Arn"
           Id: "PutCartServiceTarget"
 
+=======
+>>>>>>> 9dcdefa4a7f6411113f19d574a542b44244402f3
 
+  EventBus:
+    Type: AWS::Events::EventBus
+    Properties:
+      Name: !Sub "${AWS::StackName}-event-bus"
 
+  PutCartLambdaInvokePermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName:
+        Ref: "PutCartLambda"
+      Action: "lambda:InvokeFunction"
+      Principal: "events.amazonaws.com"
+      SourceArn:
+        Fn::GetAtt:
+          - "PutCartEventRule"
+          - "Arn"
+
+  PutCartEventRule:
+    Type: AWS::Events::Rule
+    Properties:
+      Description: "Put cart event"
+      EventBusName: !Sub "${AWS::StackName}-event-bus"
+      EventPattern:
+        source:
+          - "backoffice.product.ProductCreatedEvent"
+      State: "ENABLED"
+      Targets:
+        - Arn:
+            Fn::GetAtt:
+              - "PutCartLambda"
+              - "Arn"
+          Id: "PutCartServiceTarget"
+
+  #SQS
+
+  GenerateBillSqs:
+    Type: AWS::SQS::Queue
+    Properties:
+      QueueName: !Sub ${AWS::StackName}-generate-bill-sqs
