@@ -199,5 +199,10 @@ Resources:
             ReadCapacityUnits: 5
             WriteCapacityUnits: 5
 
+  EventCartUpdatedSqs:
+    Type: AWS::SQS::Queue
+    Properties:
+      QueueName: !Sub ${AWS::StackName}-event-cart-updated-sqs
+
 
 

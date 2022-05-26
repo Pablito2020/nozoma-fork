@@ -179,3 +179,9 @@ Resources:
               Resource: '*'
               Action:
                 - events:PutEvents
+            - Effect: Allow
+              Action:
+                - sqs:SendMessage
+                - sqs:ReceiveMessage
+              Resource:
+                - arn:aws:sqs:eu-west-1:327832251428:backoffice-joel-patrick-event-cart-updated-sqs
