@@ -3,6 +3,7 @@ import UuidVo from '@shared/domain/UuidVo';
 import CartProductList from "@pms-contexts/carts/domain/CartProductList";
 import {CartPrimitives} from "@pms-contexts/carts/domain/CartPrimitives";
 import Product from "@pms-contexts/products/domain/Product";
+import CartBoughtEvent from "@pms-contexts/carts/domain/CartBoughtEvent";
 
 export default class Cart extends Aggregate {
     constructor(
@@ -51,6 +52,16 @@ export default class Cart extends Aggregate {
             this.products.addProduct(product.id, product.commerceId, product.price),
             this.isBought
         )
+    }
+
+    buy(): Cart {
+        const cart = new Cart(
+            this.id,
+            this.products,
+            true
+        )
+        cart.record(new CartBoughtEvent(cart.toPrimitives()))
+        return cart
     }
 
 }

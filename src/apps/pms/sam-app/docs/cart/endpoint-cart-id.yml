@@ -44,6 +44,6 @@ put:
       'Fn::GetAtt': AllowExecuteLambdaRole.Arn
     uri:
       'Fn::Sub': >-
-        arn:aws:apigateway:eu-west-1:lambda:path/2015-03-31/functions/${PostControllerCartLambda.Arn}/invocations
+        arn:aws:apigateway:eu-west-1:lambda:path/2015-03-31/functions/${PutCartBoughtLambda.Arn}/invocations
     passthroughBehavior: when_no_match
     type: aws_proxy

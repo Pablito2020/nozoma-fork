@@ -207,3 +207,37 @@ Resources:
                 - sqs:ReceiveMessage
               Resource:
                 - arn:aws:sqs:eu-west-1:327832251428:backoffice-joel-patrick-generate-bill-sqs
+
+  PutCartBoughtLambda:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub '${AWS::StackName}-put-cart-bought-controller'
+      Handler: put-cart-bought-controller.handler
+      CodeUri: .dist/webpack
+      Environment:
+        Variables:
+          TABLE_NAME: !Sub '${AWS::StackName}-pms-dynamodb-table'
+          QUEUE_URL: "https://sqs.eu-west-1.amazonaws.com/327832251428/backoffice-joel-patrick-generate-bill-sqs"
+      Policies:
+        - Statement:
+            - Effect: Allow
+              Action:
+                - dynamodb:PutItem
+                - dynamodb:GetItem
+              Resource:
+                - !GetAtt Dynamodb.Arn
+            - Effect: Allow
+              Action:
+                - dynamodb:Query
+              Resource:
+                - !Sub '${Dynamodb.Arn}/index/*'
+            - Effect: Allow
+              Resource: '*'
+              Action:
+                - events:PutEvents
+            - Effect: Allow
+              Action:
+                - sqs:SendMessage
+                - sqs:ReceiveMessage
+              Resource:
+                - arn:aws:sqs:eu-west-1:327832251428:backoffice-joel-patrick-generate-bill-sqs
