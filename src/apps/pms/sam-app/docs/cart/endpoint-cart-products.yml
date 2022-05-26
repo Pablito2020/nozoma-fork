@@ -17,7 +17,7 @@ post:
           $ref: ../shared/uuid.yml#/Uuid
         example:
           {
-            "id": "baed7fdc-6644-4227-8290-35e7d5fe8060",
+            "productId": "baed7fdc-6644-4227-8290-35e7d5fe8060",
           }
   responses:
     200:
@@ -53,6 +53,6 @@ post:
       'Fn::GetAtt': AllowExecuteLambdaRole.Arn
     uri:
       'Fn::Sub': >-
-        arn:aws:apigateway:eu-west-1:lambda:path/2015-03-31/functions/${PostControllerCartLambda.Arn}/invocations
+        arn:aws:apigateway:eu-west-1:lambda:path/2015-03-31/functions/${PostCartProductControllerLambda.Arn}/invocations
     passthroughBehavior: when_no_match
     type: aws_proxy

@@ -30,8 +30,9 @@ const logger: Logger = container.get(DEFINITIONS.Logger),
             const cartId = event?.pathParameters?.id as string,
                 {
                     productId
-                } = JSON.parse(event.body as string),
-                createCartProductCommand = new AddCartProductCommand(cartId, productId),
+                } = JSON.parse(event.body as string);
+            // eslint-disable-next-line one-var
+            const createCartProductCommand = new AddCartProductCommand(cartId, productId),
                 cart = await handlerCreator.handle(createCartProductCommand)
             return {
                 statusCode: 200,

@@ -1,5 +1,5 @@
 import UuidVo from "@shared/domain/UuidVo";
-import { DocumentClient } from "aws-sdk/clients/dynamodb";
+import {DocumentClient} from "aws-sdk/clients/dynamodb";
 import Cart from "@pms-contexts/carts/domain/Cart";
 import CartRepository from "@pms-contexts/carts/domain/CartRepository";
 import {Nullable} from "@shared/domain/Nullable";
@@ -7,8 +7,9 @@ import {CartPrimitives} from "@pms-contexts/carts/domain/CartPrimitives";
 
 const composeKey = (id: UuidVo) => "cart:" + id.toString();
 export default class DynamoCartRepository implements CartRepository {
-    constructor(private client: DocumentClient, readonly tableName: string, readonly emailIndex: string) {
+    constructor(private client: DocumentClient, readonly tableName: string) {
     }
+
     async save(cart: Cart): Promise<void> {
         const key = composeKey(cart.id);
         await this.client.put({
@@ -33,8 +34,9 @@ export default class DynamoCartRepository implements CartRepository {
     }
 
     async update(cart: Cart): Promise<Nullable<Cart>> {
-        console.log(cart)
-        return null
+        if (await this.findById(cart.id) == null) return null;
+        await this.save(cart)
+        return cart;
     }
 
 }

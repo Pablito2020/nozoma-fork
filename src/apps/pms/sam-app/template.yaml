@@ -73,20 +73,6 @@ Resources:
         - AttributeName: partitionKey
           KeyType: HASH
 
-  DynamodbCart:
-    Type: AWS::DynamoDB::Table
-    Properties:
-      TableName: !Sub '${AWS::StackName}-cart-dynamodb-table'
-      ProvisionedThroughput:
-        ReadCapacityUnits: 5
-        WriteCapacityUnits: 5
-      AttributeDefinitions:
-        - AttributeName: partitionKey
-          AttributeType: S
-      KeySchema:
-        - AttributeName: partitionKey
-          KeyType: HASH
-
   ###############################
   ####      EVENT BUS       #####
   ###############################
@@ -161,7 +147,7 @@ Resources:
       CodeUri: .dist/webpack
       Environment:
         Variables:
-          TABLE_NAME: !Sub '${AWS::StackName}-cart-dynamodb-table'
+          TABLE_NAME: !Sub '${AWS::StackName}-pms-dynamodb-table'
           QUEUE_URL: "https://sqs.eu-west-1.amazonaws.com/327832251428/backoffice-joel-patrick-generate-bill-sqs"
       Policies:
         - Statement:
@@ -170,12 +156,47 @@ Resources:
                 - dynamodb:PutItem
                 - dynamodb:GetItem
               Resource:
-                - !GetAtt DynamodbCart.Arn
+                - !GetAtt Dynamodb.Arn
             - Effect: Allow
               Action:
                 - dynamodb:Query
               Resource:
-                - !Sub '${DynamodbCart.Arn}/index/*'
+                - !Sub '${Dynamodb.Arn}/index/*'
+            - Effect: Allow
+              Resource: '*'
+              Action:
+                - events:PutEvents
+            - Effect: Allow
+              Action:
+                - sqs:SendMessage
+                - sqs:ReceiveMessage
+              Resource:
+                - arn:aws:sqs:eu-west-1:327832251428:backoffice-joel-patrick-generate-bill-sqs
+
+
+  PostCartProductControllerLambda:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub '${AWS::StackName}-post-cart-product-controller'
+      Handler: post-cart-product-controller.handler
+      CodeUri: .dist/webpack
+      Environment:
+        Variables:
+          TABLE_NAME: !Sub '${AWS::StackName}-pms-dynamodb-table'
+          QUEUE_URL: "https://sqs.eu-west-1.amazonaws.com/327832251428/backoffice-joel-patrick-generate-bill-sqs"
+      Policies:
+        - Statement:
+            - Effect: Allow
+              Action:
+                - dynamodb:PutItem
+                - dynamodb:GetItem
+              Resource:
+                - !GetAtt Dynamodb.Arn
+            - Effect: Allow
+              Action:
+                - dynamodb:Query
+              Resource:
+                - !Sub '${Dynamodb.Arn}/index/*'
             - Effect: Allow
               Resource: '*'
               Action:

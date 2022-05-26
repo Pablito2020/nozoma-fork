@@ -27,7 +27,7 @@ export default class CartProductAdder {
         // eslint-disable-next-line one-var
         const updatedCart = cart.addProduct(product);
         await this.cartRepo.update(updatedCart);
-        return cart;
+        return updatedCart;
     }
 
 }
