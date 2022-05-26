@@ -162,6 +162,7 @@ Resources:
       Environment:
         Variables:
           TABLE_NAME: !Sub '${AWS::StackName}-cart-dynamodb-table'
+          QUEUE_URL: "https://sqs.eu-west-1.amazonaws.com/327832251428/backoffice-joel-patrick-generate-bill-sqs"
       Policies:
         - Statement:
             - Effect: Allow
@@ -184,4 +185,4 @@ Resources:
                 - sqs:SendMessage
                 - sqs:ReceiveMessage
               Resource:
-                - arn:aws:sqs:eu-west-1:327832251428:backoffice-joel-patrick-event-cart-updated-sqs
+                - arn:aws:sqs:eu-west-1:327832251428:backoffice-joel-patrick-generate-bill-sqs

@@ -199,10 +199,32 @@ Resources:
             ReadCapacityUnits: 5
             WriteCapacityUnits: 5
 
-  EventCartUpdatedSqs:
+  GenerateBillSqs:
     Type: AWS::SQS::Queue
     Properties:
-      QueueName: !Sub ${AWS::StackName}-event-cart-updated-sqs
+      QueueName: !Sub ${AWS::StackName}-generate-bill-sqs
 
-
-
+  GetCartDataLambda:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub '${AWS::StackName}-post-cart-controller'
+      Handler: cart.handler
+      CodeUri: .dist/webpack
+      Environment:
+        Variables:
+          QUEUE_URL: "https://sqs.eu-west-1.amazonaws.com/327832251428/backoffice-joel-patrick-generate-bill-sqs"
+      Events:
+        SQSEvent:
+          Type: SQS
+          Properties:
+            Queue: arn:aws:sqs:eu-west-1:327832251428:backoffice-joel-patrick-generate-bill-sqs
+            Enabled: true
+      Policies:
+        - Statement:
+            - Effect: Allow
+              Action:
+                - sqs:ReceiveMessage
+                - sqs:PurgeQueue
+                - sqs:DeleteQueue
+              Resource:
+                - arn:aws:sqs:eu-west-1:327832251428:backoffice-joel-patrick-generate-bill-sqs

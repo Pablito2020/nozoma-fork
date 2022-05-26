@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 
-import { APIGatewayProxyEvent, APIGatewayProxyHandler, Context } from "aws-lambda";
+import {APIGatewayProxyEvent, APIGatewayProxyHandler, Context} from "aws-lambda";
 import middy from "@middy/core";
 import httpCors from "@middy/http-cors";
 
-import { DEFINITIONS, register as sharedRegister } from "../shared/dependencies.di";
-import { CREATE_DEFINITIONS, register as createRegister } from "./dependencies.di";
-import { ContainerBuilder } from "node-dependency-injection";
+import {DEFINITIONS, register as sharedRegister} from "../shared/dependencies.di";
+import {CREATE_DEFINITIONS, register as createRegister} from "./dependencies.di";
+import {ContainerBuilder} from "node-dependency-injection";
 import CartCreatorHandler from "@pms-contexts/carts/app/create/CartCreatorHandler";
 import {Logger} from "@shared/domain/Logger";
 import CreateCartCommand from "@pms-contexts/carts/app/create/CreateCartCommand";
@@ -34,44 +34,27 @@ const logger: Logger = container.get(
         // eslint-disable-next-line @typescript-eslint/no-var-requires
         var AWS = require('aws-sdk');
         AWS.config.update({region: 'REGION'});
-        const sqs = new AWS.SQS({apiVersion: '2012-11-05'}),
-            params = {
-            // Remove DelaySeconds parameter and value for FIFO queues
-                DelaySeconds: 10,
-                MessageAttributes: {
-                    "Title": {
-                        DataType: "String",
-                        StringValue: "The Whistler"
-                    },
-                    "Author": {
-                        DataType: "String",
-                        StringValue: "John Grisham"
-                    },
-                    "WeeksOn": {
-                        DataType: "Number",
-                        StringValue: "6"
-                    }
-                },
-                MessageBody: "Information about current NY Times fiction bestseller for week of 12/11/2016.",
-                // MessageDeduplicationId: "TheWhistler",  // Required for FIFO queues
-                // MessageGroupId: "Group1",  // Required for FIFO queues
-                QueueUrl: "https://sqs.eu-west-1.amazonaws.com/327832251428/backoffice-joel-patrick-event-cart-updated-sqs"
-            };
-
-        sqs.sendMessage(params, function(err:AWSError, data: SendMessageResult) {
-            if (err) {
-                console.log("Error", err);
-            } else {
-                console.log("Success", data.MessageId);
-            }
-        });
-
+        // eslint-disable-next-line one-var
+        const sqs = new AWS.SQS({apiVersion: '2012-11-05'});
         try {
             const {
                     cartId
                 } = JSON.parse(event.body as string),
                 createCartCommand = new CreateCartCommand(cartId),
                 cart = await handlerCreator.handle(createCartCommand);
+            // eslint-disable-next-line @typescript-eslint/no-var-requires
+            // eslint-disable-next-line one-var
+            const params = {
+                MessageBody: JSON.stringify(cart.data.toPrimitives()),
+                QueueUrl: process.env.QUEUE_URL
+            };
+            sqs.sendMessage(params, (err: AWSError, data: SendMessageResult) => {
+                if (err) {
+                    console.log("Error sending message to queue", err);
+                } else {
+                    console.log("Success sending message to queue", data.MessageId);
+                }
+            });
             return {
                 statusCode: 200,
                 body: JSON.stringify(cart.data.toPrimitives())
