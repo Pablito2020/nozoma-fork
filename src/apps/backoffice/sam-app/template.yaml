@@ -64,6 +64,7 @@ Resources:
       Environment:
         Variables:
           TABLE_NAME: !Sub '${AWS::StackName}-backoffice-dynamodb-table'
+          QUEUE_URL: "https://SQSEventBus.eu-west-1.amazonaws.com/327832251428/backoffice-joel-patrick-generate-bill-SQSEventBus"
       Policies:
         - Statement:
             - Effect: Allow
@@ -81,6 +82,14 @@ Resources:
               Resource: '*'
               Action:
                 - events:PutEvents
+            - Effect: Allow
+              Action:
+                - SQSEventBus:SendMessage
+                - SQSEventBus:PurgeQueue
+                - SQSEventBus:DeleteQueue
+              Resource:
+              - arn:aws:SQSEventBus:eu-west-1:327832251428:backoffice-joel-patrick-generate-bill-sq
+
 
   GetControllerProductLambda:
     Type: AWS::Serverless::Function
@@ -206,18 +215,6 @@ Resources:
     Properties:
       Name: !Sub "${AWS::StackName}-event-bus"
 
-  PutCartLambdaInvokePermission:
-    Type: AWS::Lambda::Permission
-    Properties:
-      FunctionName:
-        Ref: "PutCartLambda"
-      Action: "lambda:InvokeFunction"
-      Principal: "events.amazonaws.com"
-      SourceArn:
-        Fn::GetAtt:
-          - "PutCartEventRule"
-          - "Arn"
-
   PutCartEventRule:
     Type: AWS::Events::Rule
     Properties:
@@ -239,4 +236,40 @@ Resources:
   GenerateBillSqs:
     Type: AWS::SQS::Queue
     Properties:
-      QueueName: !Sub ${AWS::StackName}-generate-bill-sqs
+      QueueName: !Sub ${AWS::StackName}-generate-bill-SQSEventBus
+
+
+  #CartRelated
+
+  GetCartDataLambda:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub '${AWS::StackName}-post-cart-controller'
+      Handler: cart.handler
+      CodeUri: .dist/webpack
+      Environment:
+        Variables:
+          QUEUE_URL: "https://SQSEventBus.eu-west-1.amazonaws.com/327832251428/backoffice-joel-patrick-generate-bill-SQSEventBus"
+      Events:
+        SQSEvent:
+          Type: SQS
+          Properties:
+            Queue: arn:aws:SQSEventBus:eu-west-1:327832251428:backoffice-joel-patrick-generate-bill-SQSEventBus
+            Enabled: true
+      Policies:
+        - Statement:
+            - Effect: Allow
+              Action:
+                - SQSEventBus:ReceiveMessage
+                - SQSEventBus:PurgeQueue
+                - SQSEventBus:DeleteQueue
+              Resource:
+                - arn:aws:SQSEventBus:eu-west-1:327832251428:backoffice-joel-patrick-generate-bill-sq
+          
+
+
+
+    
+
+
+

@@ -1,6 +1,4 @@
 import Aggregate from '@shared/domain/Aggregate';
-import CartProduct from "@backoffice-contexts/commerces/domain/CartProduct";
-import Cart from "@backoffice-contexts/commerces/domain/CartProduct";
 
 export default class Facture extends Aggregate {
     constructor(
@@ -10,7 +8,6 @@ export default class Facture extends Aggregate {
     }
 
     static create(
-        cart: Array<Cart>,
         info: Array<CartProduct>,
     ): any[] {
         const factures = new Array(info.length);
