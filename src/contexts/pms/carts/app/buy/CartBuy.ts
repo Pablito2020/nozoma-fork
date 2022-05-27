@@ -21,7 +21,7 @@ export default class CartBuy {
         // eslint-disable-next-line one-var
         const updatedCart = cart.buy();
         await this.cartRepo.update(updatedCart);
-        this.eventBus.publish(updatedCart.pullDomainEvents());
+        await this.eventBus.publish(updatedCart.pullDomainEvents());
         return updatedCart;
     }
 
