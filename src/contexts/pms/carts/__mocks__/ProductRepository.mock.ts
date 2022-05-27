@@ -7,6 +7,7 @@ export default class CartRepositoryMock implements CartRepository {
 
     readonly findByIdMock = jest.fn();
     readonly saveMock = jest.fn();
+    readonly updateMock = jest.fn();
 
     findById(id: UuidVo): Promise<Nullable<Cart>> {
         return this.findByIdMock(id);
@@ -36,4 +37,19 @@ export default class CartRepositoryMock implements CartRepository {
             .toHaveBeenCalled();
     }
 
+    update(cart: Cart): Promise<Nullable<Cart>> {
+        return this.updateMock(cart)
+    }
+
+    assertUpdateIsCalledWith(cart: Cart): void {
+        expect(this.saveMock)
+            .toHaveBeenCalledWith(cart);
+    }
+
+    assertUpdateIsNotCalled(): void {
+        expect(this.updateMock)
+            .not
+            .toHaveBeenCalled();
+
+    }
 }
