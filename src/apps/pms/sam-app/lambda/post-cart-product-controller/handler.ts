@@ -10,6 +10,9 @@ import { DEFINITIONS, register as sharedRegister } from "../shared/dependencies.
 import { CREATE_DEFINITIONS, register as createRegister } from "./dependencies.di";
 import AddCartProductCommand from "../../../../../contexts/pms/carts/app/add_product/AddCartProductCommand";
 import CartProductAdderHandler from "../../../../../contexts/pms/carts/app/add_product/CartProductAdderHandler";
+import CartDoesNotExist from "@pms-contexts/carts/domain/CartDoesNotExist";
+import ProductDoesNotExist from "@pms-contexts/carts/domain/ProductDoesNotExist";
+import CartAlreadyBought from "@pms-contexts/carts/domain/CartAlreadyBought";
 
 const container = new ContainerBuilder();
 sharedRegister(container);
@@ -39,6 +42,18 @@ const logger: Logger = container.get(DEFINITIONS.Logger),
                 body: JSON.stringify(cart.data.toPrimitives())
             };
         } catch (e) {
+            if (e instanceof CartAlreadyBought) {
+                return {
+                    statusCode: 403,
+                    body: JSON.stringify((e as Error).message)
+                };
+            }
+            if (e instanceof CartDoesNotExist || ProductDoesNotExist) {
+                return {
+                    statusCode: 404,
+                    body: JSON.stringify((e as Error).message)
+                };
+            }
             return {
                 statusCode: 500,
                 body: "Internal server error"

@@ -6,6 +6,7 @@ import {ProductRepository} from "@pms-contexts/products/domain/ProductRepository
 import Product from "@pms-contexts/products/domain/Product";
 import CartDoesNotExist from "@pms-contexts/carts/domain/CartDoesNotExist";
 import ProductDoesNotExist from "@pms-contexts/carts/domain/ProductDoesNotExist";
+import CartAlreadyBought from "@pms-contexts/carts/domain/CartAlreadyBought";
 
 export default class CartProductAdder {
     constructor(
@@ -21,9 +22,11 @@ export default class CartProductAdder {
         const cart: Nullable<Cart> = await this.cartRepo.findById(cartId),
             product: Nullable<Product> = await this.productRepo.findById(productId)
         if (!cart)
-            throw new CartDoesNotExist("Cart with id: " + cartId + " does not exists")
+            throw new CartDoesNotExist(`Cart with id: ${cartId} does not exists`)
         if (!product)
-            throw new ProductDoesNotExist("Product with id: " + productId + " does not exists")
+            throw new ProductDoesNotExist(`Product with id: ${productId} does not exists`)
+        if (cart.isBought)
+            throw new CartAlreadyBought(`Cart with id: ${cartId} is already bought`)
         // eslint-disable-next-line one-var
         const updatedCart = cart.addProduct(product);
         await this.cartRepo.update(updatedCart);

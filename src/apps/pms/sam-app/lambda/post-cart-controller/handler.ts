@@ -61,9 +61,15 @@ const logger: Logger = container.get(
             };
         } catch (e) {
             logger.error((e as Error).message);
-            if (e instanceof (InvalidArgumentError || AlreadyExists)) {
+            if (e instanceof InvalidArgumentError ) {
                 return {
                     statusCode: 400,
+                    body: e.message
+                }
+            }
+            if (e instanceof (AlreadyExists)) {
+                return {
+                    statusCode: 403,
                     body: e.message
                 };
             }

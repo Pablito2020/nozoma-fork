@@ -11,6 +11,8 @@ import { CREATE_DEFINITIONS, register as createRegister } from "./dependencies.d
 import CartBuyHandler from "@pms-contexts/carts/app/buy/CartBuyHandler";
 import CartBuyCommand from "@pms-contexts/carts/app/buy/CartBuyCommand";
 import CartDoesNotExist from "@pms-contexts/carts/domain/CartDoesNotExist";
+import CartIsEmpty from "@pms-contexts/carts/domain/CartIsEmpty";
+import CartAlreadyBought from "@pms-contexts/carts/domain/CartAlreadyBought";
 
 const container = new ContainerBuilder();
 sharedRegister(container);
@@ -36,9 +38,15 @@ const logger: Logger = container.get(DEFINITIONS.Logger),
                 body: JSON.stringify(cart.data.toPrimitives())
             };
         } catch (e) {
+            if (e instanceof CartIsEmpty || CartAlreadyBought) {
+                return {
+                    statusCode: 403,
+                    body: (e as Error).message
+                };
+            }
             if (e instanceof CartDoesNotExist) {
                 return {
-                    statusCode: 400,
+                    statusCode: 404,
                     body: e.message
                 };
             }

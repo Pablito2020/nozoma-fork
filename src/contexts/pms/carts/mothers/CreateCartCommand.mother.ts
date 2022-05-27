@@ -1,17 +1,16 @@
-import CreateProductCommand from "@pms-contexts/products/app/create/CreateProductCommand";
-import Product from "@pms-contexts/products/domain/Product";
+import Cart from "@pms-contexts/carts/domain/Cart";
+import CreateCartCommand from "@pms-contexts/carts/app/create/CreateCartCommand";
 
 export default class CreateCartCommandMother {
-    static fromProduct(product: Product): CreateProductCommand {
+    static fromCart(cart: Cart): CreateCartCommand {
         const {
             id,
-            commerceId,
-            name,
-            price,
-            description
-        } = product.toPrimitives();
-        return new CreateProductCommand(
-            id, commerceId, name, price, description
+            products,
+            isBought
+        } = cart.toPrimitives();
+        return new CreateCartCommand(
+            id, products, isBought
         );
     }
+
 }

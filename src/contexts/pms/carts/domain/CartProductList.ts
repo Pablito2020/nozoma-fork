@@ -30,4 +30,8 @@ export default class CartProductList {
         return new CartProductList(newProducts)
     }
 
+    isEmpty(): boolean {
+        return this.products.length === 0
+    }
+
 }

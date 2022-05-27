@@ -42,7 +42,7 @@ export default class CartRepositoryMock implements CartRepository {
     }
 
     assertUpdateIsCalledWith(cart: Cart): void {
-        expect(this.saveMock)
+        expect(this.updateMock)
             .toHaveBeenCalledWith(cart);
     }
 

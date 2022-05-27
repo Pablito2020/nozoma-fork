@@ -1,20 +1,17 @@
-import ProductMother from "@pms-contexts/products/mothers/Product.mother";
-import ProductCreator from "@pms-contexts/products/app/create/ProductCreator";
-import ProductCreatorHandler from "@pms-contexts/products/app/create/ProductCreatorHandler";
-import ProductRepositoryMock from "@pms-contexts/products/__mocks__/ProductRepository.mock";
-import CreateProductCommandMother from "@pms-contexts/products/mothers/CreateProductCommand.mother";
 import CartCreator from "@pms-contexts/carts/app/create/CartCreator";
 import AlreadyExists from "@shared/domain/AlreadyExists";
 import CartRepositoryMock from "@pms-contexts/carts/__mocks__/ProductRepository.mock";
 import CartCreatorHandler from "@pms-contexts/carts/app/create/CartCreatorHandler";
+import CartMother from "@pms-contexts/carts/mothers/Cart.mother";
+import CreateCartCommandMother from "@pms-contexts/carts/mothers/CreateCartCommand.mother";
 
 describe(CartCreator, () => {
     it('should create a new cart when cart doesn\'t already exist', async () => {
         const repo = new CartRepositoryMock(),
             creator = new CartCreator(repo),
             handler = new CartCreatorHandler(creator),
-            expected = CartMother.random(),
-            command = CreateCartCommandMother.fromProduct(expected);
+            expected = CartMother.randomWithoutProducts(),
+            command = CreateCartCommandMother.fromCart(expected);
 
         // eslint-disable-next-line one-var
         const response = await handler.handle(command);
@@ -29,10 +26,10 @@ describe(CartCreator, () => {
         const repo = new CartRepositoryMock(),
             creator = new CartCreator(repo),
             handler = new CartCreatorHandler(creator),
-            expected = CartMother.random(),
-            command = CreateCartCommandMother.fromProduct(expected);
+            expected = CartMother.randomWithoutProducts(),
+            command = CreateCartCommandMother.fromCart(expected);
 
-        repo.whenFindByIdThenReturn(null);
+        repo.whenFindByIdThenReturn(expected);
 
         await expect(handler.handle(command))
             .rejects
