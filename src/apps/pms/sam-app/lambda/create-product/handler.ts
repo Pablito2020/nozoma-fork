@@ -1,14 +1,13 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 
-import {Context, EventBridgeEvent} from "aws-lambda";
+import {Context, SQSEvent} from "aws-lambda";
 
-import { DEFINITIONS, register as sharedRegister } from "../shared/dependencies.di";
-import { CREATE_DEFINITIONS, register as createRegister } from "./dependencies.di";
-import { ContainerBuilder } from "node-dependency-injection";
-import { Logger } from "@shared/domain/Logger";
+import {DEFINITIONS, register as sharedRegister} from "../shared/dependencies.di";
+import {CREATE_DEFINITIONS, register as createRegister} from "./dependencies.di";
+import {ContainerBuilder} from "node-dependency-injection";
+import {Logger} from "@shared/domain/Logger";
 import ProductCreatorHandler from "@pms-contexts/products/app/create/ProductCreatorHandler";
 import CreateProductCommand from "@pms-contexts/products/app/create/CreateProductCommand";
-import {ProductPrimitives} from "@pms-contexts/products/domain/ProductPrimitives";
 import InvalidPriceError from "@pms-contexts/products/domain/InvalidPriceError";
 
 const container = new ContainerBuilder();
@@ -24,15 +23,15 @@ const logger: Logger = container.get(
     );
 
 // eslint-disable-next-line one-var
-export const handler = async (event: EventBridgeEvent<string, ProductPrimitives>, _context: Context) => {
-    logger.info(`Event Bridge event received{ id: ${event.id} and detail: ${event.detail}}`);
-    // eslint-disable-next-line one-var
+export const handler = async (event: SQSEvent, _context: Context) => {
+    const messages = event.Records
+    for (const message of messages)
+        await parseMessageAndExecute(message.body)
+};
+
+async function parseMessageAndExecute(productMessage: string) {
     try {
-        const id = event.detail.id,
-            commerceId = event.detail.commerceId,
-            name = event.detail.name,
-            price = event.detail.price,
-            description = event.detail.description,
+        const {id, commerceId, name, price, description} = JSON.parse(productMessage),
             createProductCommand = new CreateProductCommand(id, commerceId, name, price, description),
             product = await handlerCreator.handle(createProductCommand);
         logger.info(`Product created: ${JSON.stringify(product)}`);
@@ -43,4 +42,4 @@ export const handler = async (event: EventBridgeEvent<string, ProductPrimitives>
             logger.error(`Not known error`);
         }
     }
-};
+}

@@ -74,43 +74,14 @@ Resources:
           KeyType: HASH
 
   ###############################
-  ####      EVENT BUS       #####
+  ####      SQS   BUS       #####
   ###############################
 
-  EventBus:
-    Type: AWS::Events::EventBus
+  ProductProjectionQueue:
+    Type: AWS::SQS::Queue
     Properties:
-      Name: !Sub "${AWS::StackName}-event-bus"
+      QueueName: !Sub ${AWS::StackName}-product-projection-queue
 
-  # Define the event pattern, specify the patterns, and the bus used
-  CreateProductEventRule:
-    Type: AWS::Events::Rule
-    Properties:
-      Description: "Create product event"
-      EventBusName: !Sub "${AWS::StackName}-event-bus"
-      EventPattern:
-        source:
-          - "backoffice.product.ProductCreatedEvent"
-      State: "ENABLED"
-      Targets:
-        - Arn:
-            Fn::GetAtt:
-              - "CreateProductLambda"
-              - "Arn"
-          Id: "CreateProductServiceTarget"
-
-  # Resource that grants permission to EventBridge to invoke the target.
-  CreateProductLambdaInvokePermission:
-    Type: AWS::Lambda::Permission
-    Properties:
-      FunctionName:
-        Ref: "CreateProductLambda"
-      Action: "lambda:InvokeFunction"
-      Principal: "events.amazonaws.com"
-      SourceArn:
-        Fn::GetAtt:
-          - "CreateProductEventRule"
-          - "Arn"
 
   ###############################
   ####      LAMBDA         #####
@@ -125,6 +96,12 @@ Resources:
       Environment:
         Variables:
           TABLE_NAME: !Sub '${AWS::StackName}-pms-dynamodb-table'
+      Events:
+        SQSEvent:
+          Type: SQS
+          Properties:
+            Queue: arn:aws:sqs:eu-west-1:327832251428:pms-ferran-pablo-product-projection-queue
+            Enabled: true
       Policies:
         - Statement:
             - Effect: Allow
@@ -138,6 +115,13 @@ Resources:
                 - dynamodb:Query
               Resource:
                 - !Sub '${Dynamodb.Arn}/index/*'
+            - Effect: Allow
+              Action:
+                - sqs:ReceiveMessage
+                - sqs:PurgeQueue
+                - sqs:DeleteQueue
+              Resource:
+                - arn:aws:sqs:eu-west-1:327832251428:pms-ferran-pablo-product-projection-queue
 
   PostControllerCartLambda:
     Type: AWS::Serverless::Function
@@ -162,17 +146,6 @@ Resources:
                 - dynamodb:Query
               Resource:
                 - !Sub '${Dynamodb.Arn}/index/*'
-            - Effect: Allow
-              Resource: '*'
-              Action:
-                - events:PutEvents
-            - Effect: Allow
-              Action:
-                - sqs:SendMessage
-                - sqs:ReceiveMessage
-              Resource:
-                - arn:aws:sqs:eu-west-1:327832251428:backoffice-joel-patrick-generate-bill-sqs
-
 
   PostCartProductControllerLambda:
     Type: AWS::Serverless::Function
@@ -197,16 +170,6 @@ Resources:
                 - dynamodb:Query
               Resource:
                 - !Sub '${Dynamodb.Arn}/index/*'
-            - Effect: Allow
-              Resource: '*'
-              Action:
-                - events:PutEvents
-            - Effect: Allow
-              Action:
-                - sqs:SendMessage
-                - sqs:ReceiveMessage
-              Resource:
-                - arn:aws:sqs:eu-west-1:327832251428:backoffice-joel-patrick-generate-bill-sqs
 
   PutCartBoughtLambda:
     Type: AWS::Serverless::Function
