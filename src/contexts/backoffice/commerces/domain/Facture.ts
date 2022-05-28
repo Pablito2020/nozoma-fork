@@ -2,23 +2,21 @@ import Aggregate from '@shared/domain/Aggregate';
 
 export default class Facture extends Aggregate {
     constructor(
-        readonly cart: Cart
     ) {
         super();
     }
 
-    static create(
-        info: Array<CartProduct>,
+    create(
+        cart: Cart
     ): any[] {
-        const factures = new Array(info.length);
-        for (let i = 0; i < cart.length; i++) {
-            info[i] = cart[i].products
-        }
+        let info = new Array<CartProduct>();
+        let factures = new Array(info.length);
+        info = cart.products
 
         factures.fill(0, 0, factures.length)
 
         //assignar commerceid a les factures
-        var alreadyAdded = false
+        let alreadyAdded = false;
         for (let i = 0; i < info.length; i++) {
             for (let j = 0; j < info.length; j++) {
                 if (factures[0][j] === info[i].commerceId) {

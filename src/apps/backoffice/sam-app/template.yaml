@@ -244,17 +244,17 @@ Resources:
   GetCartDataLambda:
     Type: AWS::Serverless::Function
     Properties:
-      FunctionName: !Sub '${AWS::StackName}-post-cart-controller'
+      FunctionName: !Sub '${AWS::StackName}-get-cart-controller'
       Handler: cart.handler
       CodeUri: .dist/webpack
       Environment:
         Variables:
-          QUEUE_URL: "https://SQSEventBus.eu-west-1.amazonaws.com/327832251428/backoffice-joel-patrick-generate-bill-SQSEventBus"
+          QUEUE_URL: "https://sqs.eu-west-1.amazonaws.com/327832251428/backoffice-joel-patrick-generate-bill-sqs"
       Events:
         SQSEvent:
           Type: SQS
           Properties:
-            Queue: arn:aws:SQSEventBus:eu-west-1:327832251428:backoffice-joel-patrick-generate-bill-SQSEventBus
+            Queue:   arn:aws:sqs:eu-west-1:327832251428:backoffice-joel-patrick-generate-bill-sqs
             Enabled: true
       Policies:
         - Statement:
@@ -264,7 +264,7 @@ Resources:
                 - SQSEventBus:PurgeQueue
                 - SQSEventBus:DeleteQueue
               Resource:
-                - arn:aws:SQSEventBus:eu-west-1:327832251428:backoffice-joel-patrick-generate-bill-sq
+                - arn:aws:sqs:eu-west-1:327832251428:backoffice-joel-patrick-generate-bill-sqs
           
 
 

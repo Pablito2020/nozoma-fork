@@ -11,26 +11,23 @@ export default class SQSEventBus implements EventBus {
 
     async publish(events: Array<DomainEvent>): Promise<void> {
         this.logger.info("Events to be published:" + events)
-        var AWS = require('aws-sdk');
+        const AWS = require('aws-sdk');
         AWS.config.update({region: 'REGION'});
-// eslint-disable-next-line one-var
         const sqs = new AWS.SQS({apiVersion: '2012-11-05'});
         for (const event of events) {
             const params = {
                 MessageBody: JSON.stringify(event.toPrimitives()),
                 QueueUrl: process.env.QUEUE_URL
             };
-            sqs.sendMessage(params, (err: AWSError, data: SendMessageResult) => {
+            await sqs.sendMessage(params, (err: AWSError, data: SendMessageResult) => {
                 if (err) {
                     this.logger.error("Error sending message to queue" + err);
                 } else {
                     this.logger.info("Success sending message to queue" + data.MessageId);
                 }
-            });
+            }).promise();
         }
-        // eslint-disable-next-line one-var
-        
-        await sqs.putEvents(events).promise()
+        this.logger.info("Events published with SQS")
     }
 
 }
