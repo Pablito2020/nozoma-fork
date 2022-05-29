@@ -64,7 +64,7 @@ Resources:
       Environment:
         Variables:
           TABLE_NAME: !Sub '${AWS::StackName}-backoffice-dynamodb-table'
-          QUEUE_URL: "https://SQSEventBus.eu-west-1.amazonaws.com/327832251428/backoffice-joel-patrick-generate-bill-SQSEventBus"
+          QUEUE_URL: "https://sqs.eu-west-1.amazonaws.com/327832251428/pms-ferran-pablo-product-projection-queue"
       Policies:
         - Statement:
             - Effect: Allow
@@ -85,10 +85,8 @@ Resources:
             - Effect: Allow
               Action:
                 - SQSEventBus:SendMessage
-                - SQSEventBus:PurgeQueue
-                - SQSEventBus:DeleteQueue
               Resource:
-              - arn:aws:SQSEventBus:eu-west-1:327832251428:backoffice-joel-patrick-generate-bill-sq
+              - arn:aws:sqs:eu-west-1:327832251428:pms-ferran-pablo-product-projection-queue
 
 
   GetControllerProductLambda:
