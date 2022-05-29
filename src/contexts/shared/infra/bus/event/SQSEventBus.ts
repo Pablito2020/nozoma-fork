@@ -1,7 +1,7 @@
 import { DomainEvent } from "@shared/domain/bus/event/DomainEvent";
 import { EventBus } from "@shared/domain/bus/event/EventBus";
 import { Logger } from "@shared/domain/Logger";
-import {AWSError} from "aws-sdk";
+import {AWSError, SQS} from "aws-sdk";
 import {SendMessageResult} from "aws-sdk/clients/sqs";
 
 export default class SQSEventBus implements EventBus {
@@ -11,14 +11,16 @@ export default class SQSEventBus implements EventBus {
 
     async publish(events: Array<DomainEvent>): Promise<void> {
         this.logger.info("Events to be published:" + events)
-        const AWS = require('aws-sdk');
-        AWS.config.update({region: 'REGION'});
-        const sqs = new AWS.SQS({apiVersion: '2012-11-05'});
+        // eslint-disable-next-line @typescript-eslint/no-var-requires
+        const sqs = new SQS(),
+            queueUrl: string = process.env.QUEUE_URL as string
         for (const event of events) {
+            this.logger.info("Publishing event: " + event.eventName)
             const params = {
                 MessageBody: JSON.stringify(event.toPrimitives()),
-                QueueUrl: process.env.QUEUE_URL
+                QueueUrl: queueUrl
             };
+            this.logger.info("Parameters are: " + JSON.stringify(params))
             await sqs.sendMessage(params, (err: AWSError, data: SendMessageResult) => {
                 if (err) {
                     this.logger.error("Error sending message to queue" + err);
@@ -27,7 +29,7 @@ export default class SQSEventBus implements EventBus {
                 }
             }).promise();
         }
-        this.logger.info("Events published with SQS")
+        this.logger.info("Events published!")
     }
 
 }
