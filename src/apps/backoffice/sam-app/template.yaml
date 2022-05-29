@@ -236,7 +236,7 @@ Resources:
   GenerateBillSqs:
     Type: AWS::SQS::Queue
     Properties:
-      QueueName: !Sub ${AWS::StackName}-generate-bill-SQSEventBus
+      QueueName: !Sub ${AWS::StackName}-generate-bill-sqs
 
 
   #CartRelated
@@ -265,11 +265,3 @@ Resources:
                 - SQSEventBus:DeleteQueue
               Resource:
                 - arn:aws:sqs:eu-west-1:327832251428:backoffice-joel-patrick-generate-bill-sqs
-          
-
-
-
-    
-
-
-
