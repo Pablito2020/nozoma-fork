@@ -84,7 +84,7 @@ Resources:
                 - events:PutEvents
             - Effect: Allow
               Action:
-                - SQSEventBus:SendMessage
+                - sqs:SendMessage
               Resource:
               - arn:aws:sqs:eu-west-1:327832251428:pms-ferran-pablo-product-projection-queue
 
@@ -206,29 +206,6 @@ Resources:
             ReadCapacityUnits: 5
             WriteCapacityUnits: 5
 
-  #EventBus Related
-
-  EventBus:
-    Type: AWS::Events::EventBus
-    Properties:
-      Name: !Sub "${AWS::StackName}-event-bus"
-
-  PutCartEventRule:
-    Type: AWS::Events::Rule
-    Properties:
-      Description: "Put cart event"
-      EventBusName: !Sub "${AWS::StackName}-event-bus"
-      EventPattern:
-        source:
-          - "backoffice.product.ProductCreatedEvent"
-      State: "ENABLED"
-      Targets:
-        - Arn:
-            Fn::GetAtt:
-              - "PutCartLambda"
-              - "Arn"
-          Id: "PutCartServiceTarget"
-
   #SQS
 
   GenerateBillSqs:
@@ -243,11 +220,12 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       FunctionName: !Sub '${AWS::StackName}-get-cart-controller'
-      Handler: cart.handler
+      Handler: carts/facture-cart.handler
       CodeUri: .dist/webpack
       Environment:
         Variables:
           QUEUE_URL: "https://sqs.eu-west-1.amazonaws.com/327832251428/backoffice-joel-patrick-generate-bill-sqs"
+          TABLE_NAME: !Sub '${AWS::StackName}-backoffice-dynamodb-table'
       Events:
         SQSEvent:
           Type: SQS
@@ -256,6 +234,11 @@ Resources:
             Enabled: true
       Policies:
         - Statement:
+            - Effect: Allow
+              Action:
+                - dynamodb:GetItem
+              Resource:
+                - !GetAtt Dynamodb.Arn
             - Effect: Allow
               Action:
                 - SQSEventBus:ReceiveMessage

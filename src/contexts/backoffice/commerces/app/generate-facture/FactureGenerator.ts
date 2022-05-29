@@ -1,11 +1,11 @@
 import CartFactureParser from "@backoffice-contexts/commerces/app/generate-facture/FactureParser";
 import ProductSearcherHandler from "@backoffice-contexts/products/app/get/ProductSearcherHandler";
 import CommerceSearcherHandler from "@backoffice-contexts/commerces/app/get/CommerceSearcherHandler";
-import PriceVo from "@pms-contexts/products/domain/PriceVo";
 import FacturePrinter from "@backoffice-contexts/commerces/app/generate-facture/FacturePrinter";
 import Product from "@backoffice-contexts/products/domain/Product";
 import Commerce from "@backoffice-contexts/commerces/domain/Commerce";
 import {CartPrimitive} from "@backoffice-contexts/commerces/domain/CartPrimitive";
+import PriceVo from "@backoffice-contexts/commerces/domain/PriceVo";
 
 export default class FactureGenerator {
 
