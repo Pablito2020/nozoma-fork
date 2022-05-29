@@ -10,7 +10,7 @@ export default class FactureGeneratorHandler implements CommandHandler<GenerateF
     async handle({
         cart
     }: GenerateFactureCommand): Promise<void> {
-        this.generator.run(cart);
+        await this.generator.run(cart);
     }
 
     subscribedTo(): Command {
