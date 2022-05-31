@@ -64,6 +64,7 @@ Resources:
       Environment:
         Variables:
           TABLE_NAME: !Sub '${AWS::StackName}-backoffice-dynamodb-table'
+          QUEUE_URL: "https://sqs.eu-west-1.amazonaws.com/327832251428/pms-ferran-pablo-product-projection-queue"
       Policies:
         - Statement:
             - Effect: Allow
@@ -81,6 +82,12 @@ Resources:
               Resource: '*'
               Action:
                 - events:PutEvents
+            - Effect: Allow
+              Action:
+                - sqs:SendMessage
+              Resource:
+              - arn:aws:sqs:eu-west-1:327832251428:pms-ferran-pablo-product-projection-queue
+
 
   GetControllerProductLambda:
     Type: AWS::Serverless::Function
@@ -199,5 +206,43 @@ Resources:
             ReadCapacityUnits: 5
             WriteCapacityUnits: 5
 
+  #SQS
+
+  GenerateBillSqs:
+    Type: AWS::SQS::Queue
+    Properties:
+      QueueName: !Sub ${AWS::StackName}-generate-bill-sqs
 
 
+  #CartRelated
+
+  GetCartDataLambda:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub '${AWS::StackName}-get-cart-controller'
+      Handler: carts/facture-cart.handler
+      CodeUri: .dist/webpack
+      Environment:
+        Variables:
+          QUEUE_URL: "https://sqs.eu-west-1.amazonaws.com/327832251428/backoffice-joel-patrick-generate-bill-sqs"
+          TABLE_NAME: !Sub '${AWS::StackName}-backoffice-dynamodb-table'
+      Events:
+        SQSEvent:
+          Type: SQS
+          Properties:
+            Queue:   arn:aws:sqs:eu-west-1:327832251428:backoffice-joel-patrick-generate-bill-sqs
+            Enabled: true
+      Policies:
+        - Statement:
+            - Effect: Allow
+              Action:
+                - dynamodb:GetItem
+              Resource:
+                - !GetAtt Dynamodb.Arn
+            - Effect: Allow
+              Action:
+                - SQSEventBus:ReceiveMessage
+                - SQSEventBus:PurgeQueue
+                - SQSEventBus:DeleteQueue
+              Resource:
+                - arn:aws:sqs:eu-west-1:327832251428:backoffice-joel-patrick-generate-bill-sqs

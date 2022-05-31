@@ -4,18 +4,21 @@ import DynamoProductRepository from "@backoffice-contexts/products/infra/persist
 import { DocumentClient } from "aws-sdk/clients/dynamodb";
 import { DEFINITIONS } from "../../shared/dependencies.di";
 import ProductCreatorHandler from "@backoffice-contexts/products/app/create/ProductCreatorHandler";
-import EventBridgeEventBus from "../../../../../../contexts/shared/infra/bus/event/EventBridgeEventBus";
+import SQSEventBus from "@shared/infra/bus/event/SQSEventBus";
+import DynamoCommerceRepository
+    from "@backoffice-contexts/commerces/infra/persistence/dynamodb/DynamoCommerceRepository";
 
 const CREATE_DEFINITIONS = {
         ProductCreator: "ProductCreator",
         ProductRepository: "ProductRepository",
+        CommerceRepository: "CommerceRepository",
         Handler: "ProductCreatorHandler",
-        EventBus: "EventBridgeEventBus"
+        EventBus: "SqsEventBus"
     },
 
     register = (container: ContainerBuilder): void => {
 
-        container.register(CREATE_DEFINITIONS.EventBus, EventBridgeEventBus)
+        container.register(CREATE_DEFINITIONS.EventBus, SQSEventBus)
             .addArgument(new Reference(DEFINITIONS.Logger))
 
         container
@@ -24,11 +27,18 @@ const CREATE_DEFINITIONS = {
             .addArgument(process.env.TABLE_NAME)
             .addArgument("productId");
 
+        container
+            .register(CREATE_DEFINITIONS.CommerceRepository, DynamoCommerceRepository)
+            .addArgument(new DocumentClient())
+            .addArgument(process.env.TABLE_NAME)
+            .addArgument("emailIndex");
+
         // creation
         container
             .register(CREATE_DEFINITIONS.ProductCreator, ProductCreator)
             .addArgument(new Reference(CREATE_DEFINITIONS.ProductRepository))
-            .addArgument(new Reference(CREATE_DEFINITIONS.EventBus));
+            .addArgument(new Reference(CREATE_DEFINITIONS.EventBus))
+            .addArgument(new Reference(CREATE_DEFINITIONS.CommerceRepository));
         
         const definition = new Definition(ProductCreatorHandler);
         definition.addArgument(new Reference(CREATE_DEFINITIONS.ProductCreator));
