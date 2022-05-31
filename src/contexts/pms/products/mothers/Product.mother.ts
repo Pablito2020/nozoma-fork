@@ -30,14 +30,4 @@ export default class ProductMother {
             id, commerceId, name, price, description
         );
     }
-
-    static randomWithId(id: UuidVo): Product {
-        return ProductMother.create(
-            id,
-            UuidMother.random(),
-            ProductNameMother.random(),
-            ProductPriceMother.random(),
-            ProductDescriptionMother.random()
-        );
-    }
 }
