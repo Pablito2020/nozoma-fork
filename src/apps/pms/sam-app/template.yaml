@@ -18,29 +18,46 @@ Resources:
   #### API GATEWAY          #####
   ###############################
 
-  CreateProductLambda:
-    Type: AWS::Serverless::Function
+  ApiGatewayRestApi2:
+    Type: AWS::Serverless::Api
     Properties:
-      FunctionName: !Sub '${AWS::StackName}-create-product-controller'
-      Handler: create-product.handler
-      CodeUri: .dist/webpack
-      Environment:
-        Variables:
-          TABLE_NAME: !Sub '${AWS::StackName}-pms-dynamodb-table'
-      Policies:
-        - Statement:
-            - Effect: Allow
-              Action:
-                - dynamodb:PutItem
-                - dynamodb:GetItem
-              Resource:
-                - !GetAtt Dynamodb.Arn
-            - Effect: Allow
-              Action:
-                - dynamodb:Query
-              Resource:
-                - !Sub '${Dynamodb.Arn}/index/*'
+      StageName: 'develop'
+      MinimumCompressionSize: 1024
+      OpenApiVersion: '3.0.1'
+      DefinitionBody:
+        'Fn::Transform':
+          Name: AWS::Include
+          Parameters:
+            Location: .dist/docs/swagger.yml
 
+  AllowExecuteLambdaRole:
+    Type: AWS::IAM::Role
+    Properties:
+      Path: /
+      RoleName: !Sub ${AWS::StackName}-api-execution-role
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - apigateway.amazonaws.com
+            Action: sts:AssumeRole
+      Policies:
+        - PolicyName: !Sub ${AWS::StackName}-allow-execute-lambda-policy
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - lambda:InvokeFunction
+                Resource:
+                  - !Sub 'arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:${AWS::StackName}-*'
+
+
+  ###############################
+  ####   Dynamo Database    #####
+  ###############################
 
   Dynamodb:
     Type: AWS::DynamoDB::Table
@@ -56,37 +73,134 @@ Resources:
         - AttributeName: partitionKey
           KeyType: HASH
 
-  EventBus:
-    Type: AWS::Events::EventBus
-    Properties:
-      Name: !Sub "${AWS::StackName}-event-bus"
+  ###############################
+  ####      SQS   BUS       #####
+  ###############################
 
-  # Define the event pattern, specify the patterns, and the bus used
-  CreateProductEventRule:
-    Type: AWS::Events::Rule
+  ProductProjectionQueue:
+    Type: AWS::SQS::Queue
     Properties:
-      Description: "Create product event"
-      EventBusName: !Sub "${AWS::StackName}-event-bus"
-      EventPattern:
-        source:
-          - "backoffice.product.ProductCreatedEvent"
-      State: "ENABLED"
-      Targets:
-        - Arn:
-            Fn::GetAtt:
-              - "CreateProductLambda"
-              - "Arn"
-          Id: "CreateProductServiceTarget"
+      QueueName: !Sub ${AWS::StackName}-product-projection-queue
 
-  # Resource that grants permission to EventBridge to invoke the target.
-  CreateProductLambdaInvokePermission:
-    Type: AWS::Lambda::Permission
+
+  ###############################
+  ####      LAMBDA         #####
+  ###############################
+
+  CreateProductLambda:
+    Type: AWS::Serverless::Function
     Properties:
-      FunctionName:
-        Ref: "CreateProductLambda"
-      Action: "lambda:InvokeFunction"
-      Principal: "events.amazonaws.com"
-      SourceArn:
-        Fn::GetAtt:
-          - "CreateProductEventRule"
-          - "Arn"
+      FunctionName: !Sub '${AWS::StackName}-create-product-controller'
+      Handler: create-product.handler
+      CodeUri: .dist/webpack
+      Environment:
+        Variables:
+          TABLE_NAME: !Sub '${AWS::StackName}-pms-dynamodb-table'
+      Events:
+        SQSEvent:
+          Type: SQS
+          Properties:
+            Queue: arn:aws:sqs:eu-west-1:327832251428:pms-ferran-pablo-product-projection-queue
+            Enabled: true
+      Policies:
+        - Statement:
+            - Effect: Allow
+              Action:
+                - dynamodb:PutItem
+                - dynamodb:GetItem
+              Resource:
+                - !GetAtt Dynamodb.Arn
+            - Effect: Allow
+              Action:
+                - dynamodb:Query
+              Resource:
+                - !Sub '${Dynamodb.Arn}/index/*'
+            - Effect: Allow
+              Action:
+                - sqs:ReceiveMessage
+                - sqs:PurgeQueue
+                - sqs:DeleteQueue
+              Resource:
+                - arn:aws:sqs:eu-west-1:327832251428:pms-ferran-pablo-product-projection-queue
+
+  PostControllerCartLambda:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub '${AWS::StackName}-post-cart-controller'
+      Handler: post-cart-controller.handler
+      CodeUri: .dist/webpack
+      Environment:
+        Variables:
+          TABLE_NAME: !Sub '${AWS::StackName}-pms-dynamodb-table'
+          QUEUE_URL: "https://sqs.eu-west-1.amazonaws.com/327832251428/backoffice-joel-patrick-generate-bill-sqs"
+      Policies:
+        - Statement:
+            - Effect: Allow
+              Action:
+                - dynamodb:PutItem
+                - dynamodb:GetItem
+              Resource:
+                - !GetAtt Dynamodb.Arn
+            - Effect: Allow
+              Action:
+                - dynamodb:Query
+              Resource:
+                - !Sub '${Dynamodb.Arn}/index/*'
+
+  PostCartProductControllerLambda:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub '${AWS::StackName}-post-cart-product-controller'
+      Handler: post-cart-product-controller.handler
+      CodeUri: .dist/webpack
+      Environment:
+        Variables:
+          TABLE_NAME: !Sub '${AWS::StackName}-pms-dynamodb-table'
+          QUEUE_URL: "https://sqs.eu-west-1.amazonaws.com/327832251428/backoffice-joel-patrick-generate-bill-sqs"
+      Policies:
+        - Statement:
+            - Effect: Allow
+              Action:
+                - dynamodb:PutItem
+                - dynamodb:GetItem
+              Resource:
+                - !GetAtt Dynamodb.Arn
+            - Effect: Allow
+              Action:
+                - dynamodb:Query
+              Resource:
+                - !Sub '${Dynamodb.Arn}/index/*'
+
+  PutCartBoughtLambda:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub '${AWS::StackName}-put-cart-bought-controller'
+      Handler: put-cart-bought-controller.handler
+      CodeUri: .dist/webpack
+      Environment:
+        Variables:
+          TABLE_NAME: !Sub '${AWS::StackName}-pms-dynamodb-table'
+          QUEUE_URL: "https://sqs.eu-west-1.amazonaws.com/327832251428/backoffice-joel-patrick-generate-bill-sqs"
+      Policies:
+        - Statement:
+            - Effect: Allow
+              Action:
+                - dynamodb:PutItem
+                - dynamodb:GetItem
+              Resource:
+                - !GetAtt Dynamodb.Arn
+            - Effect: Allow
+              Action:
+                - dynamodb:Query
+              Resource:
+                - !Sub '${Dynamodb.Arn}/index/*'
+            - Effect: Allow
+              Resource: '*'
+              Action:
+                - events:PutEvents
+            - Effect: Allow
+              Action:
+                - sqs:SendMessage
+                - sqs:ReceiveMessage
+              Resource:
+                - arn:aws:sqs:eu-west-1:327832251428:backoffice-joel-patrick-generate-bill-sqs

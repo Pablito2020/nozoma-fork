@@ -1,0 +1,17 @@
+Cart:
+  type: object
+  properties:
+    id:
+      $ref: ../shared/uuid.yml#/Uuid
+      description: An uuid (v4) which identifies the cart.
+    products:
+      type: array
+      items:
+        $ref: product.yml#/Product
+        description: Products in the cart
+    isBought:
+      type: boolean
+      description: Whether the cart is bought or not.
+
+  required: [ 'id', 'products', 'isBought']
+  additionalProperties: false
