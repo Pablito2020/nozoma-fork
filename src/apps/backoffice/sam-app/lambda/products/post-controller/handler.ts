@@ -35,11 +35,18 @@ const logger: Logger = container.get(DEFINITIONS.Logger),
                     price,
                     description,
                 } = JSON.parse(event.body as string),
-                createProductCommand = new CreateProductCommand(
-                    id, commerceId, name, price, description
+                priceNumber = Number(price);
+            if (isNaN(priceNumber)) {
+                return {
+                    statusCode: 403,
+                    body: "Price must be a number"
+                };
+            }
+            // eslint-disable-next-line one-var
+            const createProductCommand = new CreateProductCommand(
+                    id, commerceId, name, priceNumber, description
                 ),
                 product = await handlerCreator.handle(createProductCommand);
-
             return {
                 statusCode: 200,
                 body: JSON.stringify(product.data.toPrimitives())
