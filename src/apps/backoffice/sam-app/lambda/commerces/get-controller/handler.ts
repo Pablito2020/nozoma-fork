@@ -31,7 +31,7 @@ const logger: Logger = container.get(
         logger.info(`REQUEST PATH parameters: ${event.pathParameters}`);
         logger.info(`REQUEST BODY: ${event.body}`);
         try {
-            const id = event?.pathParameters?.id as string,
+            const id = event?.pathParameters?.commerceid as string,
                 searchCommerceQuery = new SearchCommerceQuery(id),
                 commerce = await handlerGetter.handle(searchCommerceQuery);
             return {
