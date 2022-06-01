@@ -5,10 +5,10 @@ put:
   tags:
     - Cart
   parameters:
-    - name: "id"
-      in: "path"
+    - in: "path"
+      name: "id"
       schema:
-        - $ref: "../shared/uuid.yml#/Uuid"
+        $ref: "../shared/uuid.yml#/Uuid"
       required: true
   responses:
     200:
